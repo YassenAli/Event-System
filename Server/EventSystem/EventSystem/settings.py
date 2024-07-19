@@ -20,7 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-_qbl#-9r_s(@n)1i@vafohclyz4t)k&ci66!z0f#@30mbw^*1x'
+=======
+SECRET_KEY = 'django-insecure-1!5afdk8^q&wdg2_^(-nyz3$1z+noowt!&z=^wkxc-b428it&s'
+>>>>>>> Server-Side
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events.apps.EventsConfig',
+<<<<<<< HEAD
+=======
+    'rest_framework',
+    'corsheaders',
+>>>>>>> Server-Side
 ]
 
 MIDDLEWARE = [
@@ -48,6 +57,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+<<<<<<< HEAD
+=======
+    'corsheaders.middleware.CorsMiddleware',
+    
+]
+
+CORS_ALLOWED_ORIGINS = [
+    # "http://localhost:3000",  # or we can provide front-end URL
+>>>>>>> Server-Side
 ]
 
 ROOT_URLCONF = 'EventSystem.urls'
@@ -78,6 +96,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+<<<<<<< HEAD
+=======
+        # 'USER': '',
+        # 'PASSWORD': '',
+        # 'HOST': '',
+        # 'PORT': '',
+>>>>>>> Server-Side
     }
 }
 
