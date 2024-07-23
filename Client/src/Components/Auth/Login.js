@@ -9,18 +9,29 @@ function Login({ onLogin, errorMessage }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSignUp) {
-      const response = await fetch('/api/signup', {
+    const url = isSignUp ? 'http://127.0.0.1:8000/api/signup/' : 'http://127.0.0.1:8000/api/login/';
+    const body = isSignUp ? { username: name, email, password } : { username: email, password };
+
+    try {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify(body),
       });
       const data = await response.json();
-      console.log(data);
-    } else {
-      onLogin({ email, password });
+      if (response.ok) {
+        if (isSignUp) {
+          setIsSignUp(false);
+        } else {
+          onLogin(data);
+        }
+      } else {
+        alert(`Error: ${data.error || 'Something went wrong!'}`);
+      }
+    } catch (error) {
+      alert(`Error: ${error.message}`);
     }
   };
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Login from './Components/Auth/Login';
 import Loader from './Components/Loader';
 import AdminDashboard from './Pages/Admin/AdminDashboard';
@@ -10,23 +11,49 @@ function App() {
   const [userRole, setUserRole] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleLogin = async ({ email, password }) => {
+  // const handleLogin = async ({ email, password }) => {
+  const handleLogin = async ({ username, password }) => {
     setLoading(true);
     setErrorMessage(''); // Reset error message
 
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
+        username,
+        password,
+      });
+
     // Simulate an API call with hardcoded credentials
-    setTimeout(() => {
-      if (email === 'admin@example.com' && password === '12345678') {
-        setIsAuthenticated(true);
+  //   setTimeout(() => {
+  //     if (email === 'admin@example.com' && password === '12345678') {
+  //       setIsAuthenticated(true);
+  //       setUserRole('admin');
+  //     } else if (email === 'user@example.com' && password === '87654321') {
+  //       setIsAuthenticated(true);
+  //       setUserRole('user');
+  //     } else {
+  //       setErrorMessage('Not Found!');
+  //     }
+  //     setLoading(false);
+  //   }, 2000);
+  // };
+
+  const { token, user_id, username } = response.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user_id', user_id);
+      localStorage.setItem('username', username);
+
+      setIsAuthenticated(true);
+      
+      if (username === 'admin') {
         setUserRole('admin');
-      } else if (email === 'user@example.com' && password === '87654321') {
-        setIsAuthenticated(true);
-        setUserRole('user');
       } else {
-        setErrorMessage('Not Found!');
+        setUserRole('user');
       }
+    } catch (error) {
+      setErrorMessage('Invalid credentials');
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   return (
