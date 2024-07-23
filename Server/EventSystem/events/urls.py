@@ -1,12 +1,14 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, EventViewSet, BookingViewSet
+from .views import UserViewSet, EventViewSet, BookingViewSet, SignupView, LoginView
 
 router = DefaultRouter()
-router.register('users', UserViewSet)
-router.register('events', EventViewSet)
-router.register('events', BookingViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'events', EventViewSet)
+router.register(r'bookings', BookingViewSet)
 
-url_patterns = [
-    path('', include(router.urls))
+urlpatterns = [
+    path('', include(router.urls)),
+    path('api/signup/', SignupView.as_view(), name='signup'),
+    path('api/login/', LoginView.as_view(), name='login'),
 ]
