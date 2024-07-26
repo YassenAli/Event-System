@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import User, Event, Booking
+from .models import CustomUser, Event, Booking
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'is_admin')
+        model = CustomUser
+        fields = ('username', 'email', 'is_admin', 'password')
         
 class EventSerializer(serializers.ModelSerializer):
     class Meta:

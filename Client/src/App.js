@@ -21,36 +21,23 @@ function App() {
         username,
         password,
       });
-
-    // Simulate an API call with hardcoded credentials
-  //   setTimeout(() => {
-  //     if (email === 'admin@example.com' && password === '12345678') {
-  //       setIsAuthenticated(true);
-  //       setUserRole('admin');
-  //     } else if (email === 'user@example.com' && password === '87654321') {
-  //       setIsAuthenticated(true);
-  //       setUserRole('user');
-  //     } else {
-  //       setErrorMessage('Not Found!');
-  //     }
-  //     setLoading(false);
-  //   }, 2000);
-  // };
-
-  const { token, user_id, username } = response.data;
-      localStorage.setItem('token', token);
+      localStorage.setItem('test', 'test');
+      localStorage.setItem('response', JSON.stringify(response));
+      const { token, user_id, username, is_admin} = response.data;
+      localStorage.setItem('token', response.data.token);
       localStorage.setItem('user_id', user_id);
       localStorage.setItem('username', username);
+      localStorage.setItem('is_admin', is_admin)
 
       setIsAuthenticated(true);
       
-      if (username === 'admin') {
-        setUserRole('admin');
-      } else {
-        setUserRole('user');
-      }
+      setUserRole(is_admin ? 'admin' : 'user');
     } catch (error) {
-      setErrorMessage('Invalid credentials');
+      if (error.response && error.response.data && error.response.data.error) {
+        setErrorMessage(error.response.data.error);
+      } else {
+        setErrorMessage('Invalid credentials');
+      }
     } finally {
       setLoading(false);
     }
