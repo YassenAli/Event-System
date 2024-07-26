@@ -60,7 +60,7 @@ CORS_ALLOWED_ORIGINS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'events.authentication.CustomTokenAuthentication',
     ],
 }
 
@@ -143,4 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Use the custom user model
-AUTH_USER_MODEL = 'events.User'
+# AUTH_USER_MODEL = 'events.CustomUser'
