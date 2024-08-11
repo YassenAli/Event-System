@@ -15,6 +15,7 @@ function Login({ onLogin, errorMessage }) {
     const url = isSignUp ? 'http://127.0.0.1:8000/api/signup/' : 'http://127.0.0.1:8000/api/login/';
     const body = isSignUp ? { username, email, password, is_admin: isAdmin } : { username, password };
 
+    // console.log(body);
 
     try {
       const response = await fetch(url, {

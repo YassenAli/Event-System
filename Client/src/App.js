@@ -1,3 +1,8 @@
+import React, { useState } from 'react';
+import Login from './Components/Auth/Login';
+import Loader from './Components/Loader';
+import AdminDashboard from './Pages/Admin/AdminDashboard';
+import UserDashboard from './Pages/User/UserDashboard';
 import React from 'react'
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
@@ -12,26 +17,21 @@ function App() {
   const [userRole, setUserRole] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // const handleLogin = async ({ email, password }) => {
-  const handleLogin = async ({ username, password }) => {
+  const handleLogin = async (data ) => {
     setLoading(true);
     setErrorMessage(''); // Reset error message
+    
+    console.log(data)
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login/', {
-        username,
-        password,
-      });
-      localStorage.setItem('test', 'test');
-      localStorage.setItem('response', JSON.stringify(response));
-      const { token, user_id, username, is_admin} = response.data;
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('response', JSON.stringify(data));
+      const { token, user_id, username, is_admin } = data;
+      localStorage.setItem('token', token);
       localStorage.setItem('user_id', user_id);
       localStorage.setItem('username', username);
-      localStorage.setItem('is_admin', is_admin)
+      localStorage.setItem('is_admin', is_admin);
 
       setIsAuthenticated(true);
-      
       setUserRole(is_admin ? 'admin' : 'user');
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
@@ -65,6 +65,7 @@ export default function App() {
   )
 }
 
+export default App;
 
 
 //------< new >---------
