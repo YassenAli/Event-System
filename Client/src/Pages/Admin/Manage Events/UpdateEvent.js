@@ -104,7 +104,7 @@ export default function UpdateEvent() {
   return (
     <div className="manage-events-container">
       <div className="add-nav">
-        <h3 style={{fontSize:"26px"}}>Add Event</h3>
+        <h3 style={{fontSize:"26px"}}>Update Event</h3>
       </div>
       <form onSubmit={handleSubmit} className="manage-events-form">
         <input
@@ -150,7 +150,8 @@ export default function UpdateEvent() {
           className="manage-events-input"
         />
         <button type="submit" className="manage-events-button">
-          {isEditing ? 'Update Event' : 'Create Event'}
+          {/* {isEditing ? 'Update Event' : 'Create Event'} */}
+          Update Event
         </button>
       </form>
     </div>

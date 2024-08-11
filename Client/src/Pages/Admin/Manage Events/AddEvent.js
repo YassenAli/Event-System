@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../../App.css';
+import Alert from 'react-bootstrap/Alert';
 
 export default function AddEvent() {
   const [events, setEvents] = useState([]);
@@ -106,7 +107,10 @@ export default function AddEvent() {
       <div className="add-nav">
         <h3 style={{fontSize:"26px"}}>Add Event</h3>
       </div>
+ 
       <form onSubmit={handleSubmit} className="manage-events-form">
+      <Alert variant={'danger'} className='auth-alert w-100'>this is simple alert</Alert>{/* #ff305d*/}
+      <Alert variant={'success'} className='auth-alert w-100'>this is simple alert</Alert>{/* #ff305d*/}
         <input
           type="text"
           name="title"
@@ -150,7 +154,8 @@ export default function AddEvent() {
           className="manage-events-input"
         />
         <button type="submit" className="manage-events-button">
-          {isEditing ? 'Update Event' : 'Create Event'}
+          {/* {isEditing ? 'Update Event' : 'Create Event'} */}
+          Create Event
         </button>
       </form>
       {/* <table className="event-list-table">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../App.css";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert';
 
 export default function ManageEvents() {
   const [events, setEvents] = useState([]);
@@ -45,6 +46,9 @@ export default function ManageEvents() {
           <span class="button__icon">+</span>
         </Link>
       </div>
+      <Alert variant={'danger'} className='auth-alert w-100'>this is simple alert</Alert>{/* #ff305d*/}
+      <Alert variant={'success'} className='auth-alert w-100'>this is simple alert</Alert>{/* #ff305d*/}
+
       <Table striped bordered hover style={{fontSize:"16px"}}>
         <thead>
           <tr>
@@ -74,12 +78,12 @@ export default function ManageEvents() {
                   Delete
                 </button>
                 <Link
-                  to={`update/${event._id}`}
+                  to={`${event._id}`}
                   className="btn btn-success mx-1"
                 >
                   Update
                 </Link>
-                <Link to={`view/${event._id}`} className="btn btn-info">
+                <Link to={`/${event._id}`} className="btn btn-info">
                   view
                 </Link>
               </td>

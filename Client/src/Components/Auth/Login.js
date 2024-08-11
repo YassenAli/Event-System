@@ -6,7 +6,7 @@ function Login({ onLogin, errorMessage }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [name, setName] = useState('');
+  const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
 

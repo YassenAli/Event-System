@@ -42,9 +42,6 @@ class SignupView(APIView):
             username=username,
             email=email,
             password=make_password(password),
-            # password=password,
-            # password=make_password(password),
-            password=password,
             is_admin=is_admin
         )
         user.save()

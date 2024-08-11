@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import '../../../App.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 
 export default function AddUser() {
   const [users, setUsers] = useState([]);
@@ -105,10 +109,16 @@ export default function AddUser() {
   return (
     <div className="manage-user-container">
       <div className="add-nav">
-        <h3 style={{fontSize:"26px"}}>Manage User</h3>
+        <h3 style={{fontSize:"26px"}}>Add User</h3>
       </div>
       <form onSubmit={handleSubmit} className="manage-user-form">
-        <input
+      <Alert variant={'danger'} className='auth-alert w-100'>this is simple alert</Alert>{/* #ff305d*/}
+      <Alert variant={'success'} className='auth-alert w-100'>this is simple alert</Alert>{/* #ff305d*/}
+       <Container>
+      <Row>
+        <Col sm={11}>
+        <Row>
+         <input
           type="text"
           name="username"
           value={userData.username}
@@ -117,6 +127,8 @@ export default function AddUser() {
           required
           className="manage-user-input"
         />
+        </Row>
+        <Row>
         <input
           type="email"
           name="email"
@@ -126,6 +138,8 @@ export default function AddUser() {
           required
           className="manage-user-input"
         />
+        </Row>
+        <Row>
         <input
           type="password"
           name="password"
@@ -135,11 +149,17 @@ export default function AddUser() {
           required
           className="manage-user-input"
         />
-        <button type="submit" className="manage-user-button">
-          {isEditing ? 'Update User' : 'Create User'}
+        </Row>
+        </Col>
+        <Col sm={1}>
+	        <button type="submit" className="manage-user-button">
+          {isEditing ? 'Update User' : 'Add'}
         </button>
+        </Col>
+      </Row>
+    </Container>
       </form>
-      <div className="user-list">
+      {/* <div className="user-list">
         {users.map((user) => (
           <div key={user._id} className="user-list-item">
             <span>{user.username} ({user.email})</span>
@@ -147,7 +167,7 @@ export default function AddUser() {
             <button onClick={() => handleDelete(user._id)} className="delete-button">Delete</button>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

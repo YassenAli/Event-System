@@ -10,6 +10,7 @@ import AddEvent from "./Pages/Admin/Manage Events/AddEvent";
 import ManageEvents from "./Pages/Admin/Manage Events/MangeEvents";
 import AddUser from "./Pages/Admin/Manage User/AddUser";
 import UpdateEvent from "./Pages/Admin/Manage Events/UpdateEvent";
+import Loader from "./Components/Loader";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -68,7 +69,7 @@ export const router = createBrowserRouter([
             element: <AddEvent/>,
           },
           {
-            path: "update",
+            path: "update", //update
             element: <UpdateEvent />,
           },
         ]
@@ -76,6 +77,10 @@ export const router = createBrowserRouter([
       {
         path: "*",
         element: <NotFound />,
+      },
+      {
+        path: "/load",
+        element: <Loader />,
       },
     ]
   },]);
