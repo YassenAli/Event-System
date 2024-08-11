@@ -17,11 +17,11 @@ class CustomUser(models.Model):
     is_anonymous = False
     is_authenticated = True
 
-    # def set_password(self, raw_password):
-    #     self.password = make_password(raw_password)
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
 
-    # def check_password(self, raw_password):
-    #     return check_password(raw_password, self.password)
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
     
     def __str__(self):
         return self.username
