@@ -12,8 +12,6 @@ class CustomUser(models.Model):
     password = models.CharField(max_length=100)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    seatNumber = models.IntegerField(default=0)
-
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
     is_anonymous = False
@@ -21,11 +19,6 @@ class CustomUser(models.Model):
 
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
-
-    def check_password(self, raw_password):
-        return check_password(raw_password, self.password)
-    # def set_password(self, raw_password):
-    #     self.password = make_password(raw_password)
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
