@@ -42,10 +42,6 @@ class SignupView(APIView):
         user = CustomUser(
             username=username,
             email=email,
-            password=make_password(password),
-            # password=password,
-            # password=make_password(password),
-            password=password,
             is_admin=is_admin
         )
         user.set_password(password)
@@ -57,22 +53,6 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
-        user = CustomUser.objects.get(username=username)
-        
-        try:
-            user = CustomUser.objects.get(username=username)
-        except CustomUser.DoesNotExist:
-            return Response({'error': 'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if user.check_password(password):
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key, 'user_id': user.id, 'username': user.username, 'is_admin': user.is_admin})
-        else:
-            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # user = authenticate(username=username, password=password)
-        
-        # user = CustomUser.objects.get(username=username)
         
         try:
             user = CustomUser.objects.get(username=username)
