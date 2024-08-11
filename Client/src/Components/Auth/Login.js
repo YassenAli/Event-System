@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../Components.css';
+import Alert from 'react-bootstrap/Alert';
 
 function Login({ onLogin, errorMessage }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -54,6 +55,8 @@ function Login({ onLogin, errorMessage }) {
             <div className="login-flip-card__front">
               <div className="login-title">Log in</div>
               <form onSubmit={handleSubmit} className="login-flip-card__form">
+              <Alert variant={'danger'} className='auth-alert'>Alert</Alert>{/* #ff305d*/}
+                <input type="email" placeholder="Email" name="email" className="login-flip-card__input" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="text" placeholder="Username" name="username" className="login-flip-card__input" value={username} onChange={(e) => setUsername(e.target.value)} />
                 <input type="password" placeholder="Password" name="password" className="login-flip-card__input" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button className="login-flip-card__btn">Let's go!</button>
@@ -64,6 +67,8 @@ function Login({ onLogin, errorMessage }) {
             <div className="login-flip-card__back">
               <div className="login-title">Sign up</div>
               <form onSubmit={handleSubmit} className="login-flip-card__form">
+              <Alert variant={'danger'} className='auth-alert'>Alert</Alert>{/* #ff305d*/}
+                <input type="text" placeholder="Name" className="login-flip-card__input" value={name} onChange={(e) => setName(e.target.value)} />
                 <input type="text" placeholder="Username" className="login-flip-card__input" value={username} onChange={(e) => setUsername(e.target.value)} />
                 <input type="email" placeholder="Email" name="email" className="login-flip-card__input" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Password" name="password" className="login-flip-card__input" value={password} onChange={(e) => setPassword(e.target.value)} />

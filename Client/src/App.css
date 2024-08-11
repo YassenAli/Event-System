@@ -1,38 +1,490 @@
-.App {
-  text-align: center;
+/*----------------------- UserDashboard.css -----------------------*/
+@import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
+
+body {
+  overflow: hidden; /* Prevent scrolling on the entire page */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.user-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--app-container);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.user-dashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 56px;
+  padding: 0 24px;
+  background: var(--header-bg);
+  box-shadow: 0 2px 8px var(--header-shadow);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.user-dashboard__header-left {
+  display: flex;
+  align-items: center;
+}
+
+.user-dashboard__icon {
+  width: 36px;
+  height: 36px;
+  /* font-size: 38px; */
+  color: #c08610;
+  background: var(--link-color);
+  border-radius: 50%;
+}
+
+.user-dashboard__name {
+  font-weight: 700;
+  font-size: 22px;
+  margin-left: 12px;
+  margin-top: 20px;
+  color: #584c34;
+}
+
+.user-dashboard__header-right {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.user-dashboard__content {
+  display: flex;
+  flex-grow: 1;
+}
+
+.user-dashboard__sidebar {
+  width: 72px;
+  background: var(--header-bg);
+  box-shadow: 0 2px 8px var(--header-shadow);
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 24px;
+  margin-left: 5px;
+}
+
+.user-dashboard__sidebar-link {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 24px;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  border-radius: 12px;
+  color: var(--link-color);
+  background: transparent;
+  transition: background-color 0.3s;
+}
+.user-dashboard__sidebar-link:focus,
+.user-dashboard__sidebar-link:hover {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.user-dashboard__projects-section {
+  flex-grow: 1;
+  padding: 24px;
+  background-color: white;
+  border-radius: 35px;
+  margin-right: 50px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  height: calc(97vh - 85px); /* Fixed height */
+  margin-left: 10px;
+}
+
+.user-dashboard__projects-section-header {
+  display: flex;
+  /* justify-content: center; */
+  padding: 25px;
+  background-color:#ebe6dd;
+  border-radius: 15px;
+}
+
+/* .user-dashboard__projects-section-header p {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--main-color);
+} */
+
+.user-dashboard__project-boxes {
+  /* display: flex; */
+  flex-wrap: wrap;
+  overflow-y: auto;
+  height: calc(100% - 48px); /* Subtract the header height */
+  flex-grow: 1;
+}
+
+
+.user-dashboard__logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 37px;
+  height: 37px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: .3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color:black;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+/* plus sign */
+.logout-sign{
+  width: 100%;
+  transition-duration: .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+/* text */
+.logout-text{
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition-duration: .3s;
 }
+/* hover effect on button width */
+.user-dashboard__logout-btn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.user-dashboard__logout-btn:hover .logout-sign{
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 9px;
+}
+/* hover effect button's text */
+.user-dashboard__logout-btn:hover .logout-text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 5px;
+
+}
+/* button click effect*/
+.user-dashboard__logout-btn:active {
+  transform: translate(2px ,2px);
+}
+
+
+/*----------------------- MangeUser.css -----------------------*/
+.manage-user-container {
+  padding: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  max-width: 990px;
+  margin: 30px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* height: 63vh; */
+}
+
+.user-dashboard__projects-section-header p {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.manage-user-form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.manage-user-input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  
+}
+
+.manage-user-input:focus {
+  border-color: #c08610;
+  outline: none;
+}
+
+.manage-user-button {
+  padding: 10px 20px;
+  color: rgb(65, 57, 11);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  align-items: center;
+  border: 2px solid rgb(65, 57, 11);
+  box-shadow: 4px 4px rgb(65, 57, 11);
+  background-color:#c08610;
+  border-radius: 6px;
+  font-size: 21px;
+  font-weight: 650;
+
+}
+
+.manage-user-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.manage-user-button:not(:disabled):hover {
+  background-color: #a76f08;
+}
+
+.user-list {
+  margin-top: 20px;
+}
+
+.user-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.edit-button, .delete-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button {
+  background-color: #f0ad4e;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.edit-button:hover {
+  background-color: #ec971f;
+}
+
+.delete-button {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+}
+
+/*----------------------- ManageEvents.css -----------------------*/
+
+.add-button{
+  --font-color: #323232;
+  --bg-color-sub: rgb(36 134 36);
+  --bg-color: #d8f1d7;
+  --main-color: #1d471a;
+  position: relative;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration-line: none;
+  margin-right: 6px;
+}
+
+.add-button, .button__icon, .button__text {
+  transition: all 0.3s;
+}
+
+.add-button .button__text {
+  transform: translateX(22px);
+  color: #1d471a;
+  font-weight: 600;
+  font-size: large;
+}
+
+.add-button .button__icon {
+  position: absolute;
+  transform: translateX(109px);
+  height: 100%;
+  width: 39px;
+  background-color: var(--bg-color-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:#1d471a;
+  font-size: 26px;
+}
+
+
+.add-button:hover {
+  background: var(--bg-color);
+}
+
+.add-button:hover .button__text {
+  color: transparent;
+}
+
+.add-button:hover .button__icon {
+  width: 148px;
+  transform: translateX(0);
+}
+
+.add-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px var(--main-color);
+}
+
+/*----------------------- AddEvent.css -----------------------*/
+.manage-events-container {
+  padding: 20px;
+  background-color: #ddd;
+  border-radius: 10px;
+  max-width: 990px;
+  margin: 30px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* height: 63vh; */
+}
+
+.user-dashboard__projects-section-header p {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Manage Events Form */
+.manage-events-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.manage-events-input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: border 0.3s ease;
+}
+
+.manage-events-input:focus {
+  border: 1px solid #c08610;
+  outline: none;
+}
+
+.manage-events-button {
+  padding: 10px 20px;
+  color: rgb(65, 57, 11);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  align-items: center;
+  border: 2px solid rgb(65, 57, 11);
+  box-shadow: 4px 4px rgb(65, 57, 11);
+  background-color:#c08610;
+  border-radius: 6px;
+  font-size: 21px;
+  font-weight: 650;
+
+}
+
+.manage-events-button:hover {
+  background-color: #835e15;
+}
+
+/* Event List */
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.event-list-item {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.event-list-item:hover {
+  background-color: #f1f1f1;
+}
+
+.edit-button, .delete-button {
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button {
+  background-color: #28a745;
+}
+
+.edit-button:hover {
+  background-color: #218838;
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+/*------ manage header ------- */
+.top-main-head{
+padding: 20px;
+border-radius: 15px;
+}
+.add-nav{
+  /* padding: 20px;
+  background-color: none;
+  border-radius: 15px; */
+  text-align: center;
+}
+/*----------------------- Loader.css -----------------------*/
+
+/*----------------------- Loader.css -----------------------*/
+
+/*----------------------- Loader.css -----------------------*/
+
+/*----------------------- Loader.css -----------------------*/
+/*----------------------- Loader.css -----------------------*/
+
+/*----------------------- Loader.css -----------------------*/
+
