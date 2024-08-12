@@ -1,41 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import '../../App.css';
+import '../../App.css';import axios from 'axios';
+import Loader from '../../Components/Loader';
+import Alert from 'react-bootstrap/Alert';
+import Table from 'react-bootstrap/Table';
+import { PiTicketBold } from "react-icons/pi";
 
 export default function AUserBookings() {
-  const [bookings, setBookings] = useState([]);
+  const [userBookings, setUserBookings] = useState({
+    loading: true,
+    results: [],
+    err: null,
+  });
 
   useEffect(() => {
-    fetchBookings();
-    const intervalId = setInterval(fetchBookings, 5000); // Adjust interval as needed
+    const fetchUserBookings = async () => {
+      try {
+        const response = await axios.get('/api/admin/bookings');
+        setUserBookings({ loading: false, results: response.data, err: null });
+      } catch (error) {
+        setUserBookings({ loading: false, err: 'Failed to load user bookings' });
+      }
+    };
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    fetchUserBookings();
   }, []);
-
-  const fetchBookings = async () => {
-    try {
-      const response = await fetch('/api/bookings');
-      const data = await response.json();
-      setBookings(data);
-    } catch (error) {
-      console.error('Error fetching bookings:', error);
-    }
-  };
 
   return (
     <div className="admin-events-container">
-      <div className="top-main-head d-flex justify-content-between mb-3" style={{backgroundColor:"#f2dee1"}}>
-        <h3 style={{fontSize:"26px", color:"rgb(90 56 92)"}}>User Bookings</h3>
-      </div>
-      <div className="booking-list">
-        {bookings.map((booking) => (
-          <div key={booking._id} className="booking-list-item">
-            <span>{booking.eventTitle} booked by {booking.email}</span>
-          </div>
-        ))}
-      </div>
+    <div className="top-main-head d-flex justify-content-between mb-3" style={{backgroundColor:"#f2dee1"}}>
+      <h3 style={{fontSize:"23px", color:"rgb(90 56 92)"}}>User Bookings <PiTicketBold fontSize={"28px"} style={{marginBottom:"3px"}}/></h3>
+    </div>
+    <div className="booking-list">
+      {userBookings.loading && <Loader />}
+
+      {userBookings.err && (
+        <Alert variant="danger" className="text-center">
+          {userBookings.err}
+        </Alert>
+      )}
+
+      {!userBookings.loading && !userBookings.err && (
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>User Email</th>
+              <th>Event Title</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Seat Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userBookings.results.map((booking, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{booking.email}</td>
+                <td>{booking.eventTitle}</td>
+                <td>{booking.date}</td>
+                <td>{booking.time}</td>
+                <td>{booking.seatNumber}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
+
+      {!userBookings.loading && !userBookings.err && userBookings.results.length === 0 && (
+        <Alert variant="info" className="text-center">
+          No bookings found!
+        </Alert>
+      )}
+    </div>
     </div>
   );
 }
+
 
 
 // import React, { useState, useEffect } from 'react';

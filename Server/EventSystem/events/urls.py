@@ -8,7 +8,7 @@ router.register(r'events', EventViewSet)
 router.register(r'bookings', BookingViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api', include(router.urls)),
     path('api/signup/', SignupView.as_view(), name='signup'),
     path('api/login/', LoginView.as_view(), name='login'),
 ]

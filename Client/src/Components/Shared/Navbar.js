@@ -4,12 +4,18 @@ import { IoMdLogOut } from "react-icons/io";
 import { IoMdLogIn } from "react-icons/io";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { removeAuthUser, getAuthUser } from "../../helper/Storage";
 export default function Navbar() {
     const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate("./login");
+    const auth = getAuthUser();
+    console.log(auth);
+    const Login = () => {
+        navigate("/login");
+    };
+    const Logout = () => {
+        removeAuthUser();
+        navigate("/");
     };
     return (
         <div className="user-dashboard__header">
@@ -21,20 +27,31 @@ export default function Navbar() {
                 </span>
                 <p className="user-dashboard__name">Evnti</p>
             </div>
-            {/* logout */}
+            {/* login */}
             <div className="user-dashboard__header-right">
-            <button
-            onClick={handleClick}
-            className="user-dashboard__logout-btn"
-            style={{ backgroundColor: "#c08610" }}
-        >
-            <IoMdLogIn className="login-sign" fontSize={"24px"} />
-            <div className="logout-text">Login</div>
-        </button>
-                <button className="user-dashboard__logout-btn">
-                    <IoMdLogOut className="logout-sign" fontSize={"24px"} />
-                    <div className="logout-text">Logout</div>
-                </button>
+                {
+                    /* Unauthenticated Routes */
+                    !auth && (
+                        <button
+                            onClick={Login}
+                            className="user-dashboard__logout-btn"
+                            style={{ backgroundColor: "#c08610" }}
+                        >
+                            <IoMdLogIn className="login-sign" fontSize={"24px"} />
+                            <div className="logout-text">Login</div>
+                        </button>
+                    )
+                }
+
+                {
+                    /* Authenticated Routes */
+                    auth && (
+                        <button className="user-dashboard__logout-btn" onClick={Logout}>
+                            <IoMdLogOut className="logout-sign" fontSize={"24px"} />
+                            <div className="logout-text">Logout</div>
+                        </button>
+                    )
+                }
             </div>
         </div>
     );

@@ -421,6 +421,7 @@ pallete{
   width: 250px;
   border-radius: 5px;
   padding: 5px;
+  font-size: medium;
 }
 .login-switch {
   transform: translateY(-200px);

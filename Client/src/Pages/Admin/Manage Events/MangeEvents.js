@@ -1,95 +1,165 @@
+
 import React, { useState, useEffect } from "react";
 import "../../../App.css";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
+import axios from "axios";
+import { getAuthUser } from "../../../helper/Storage";
+import Loader from "../../../Components/Loader";
+import { MdEventNote } from "react-icons/md";
+import { RiDeleteBin3Line } from "react-icons/ri";
+import { MdOutlineTipsAndUpdates } from "react-icons/md";
 
 export default function ManageEvents() {
-  const [events, setEvents] = useState([]);
+  const auth = getAuthUser();
+
+  const [events, setEvents] = useState({
+    loading: true,
+    results: [],
+    err: null,
+    reload: 0,
+  });
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      const response = await fetch("/api/events");
-      const data = await response.json();
-      setEvents(data);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    }
-  };
-
-  const handleDelete = async (eventId) => {
-    try {
-      const response = await fetch(`/api/events/${eventId}`, {
-        method: "DELETE",
+    setEvents({ ...events, loading: true });
+    axios
+      .get("/api/events")
+      .then((resp) => {
+        setEvents({ ...events, results: resp.data, loading: false });
+      })
+      .catch((err) => {
+        setEvents({
+          ...events,
+          loading: false,
+          err: "somthing went wrong, please try again later!",
+        });
       });
+  }, [events.reload]);
 
-      if (response.ok) {
-        fetchEvents();
-      } else {
-        // Handle error
-      }
-    } catch (error) {
-      console.error("Error deleting event:", error);
+  const deleteEvent = (id) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      axios
+        .delete("/api/events/" + id, {
+          headers: {
+            token: auth.token,
+          },
+        })
+        .then((resp) => {
+          setEvents({ ...events, reload: events.reload + 1 });
+        })
+        .catch((err) => {
+          setEvents({
+            ...events,
+            loading: false,
+            err: "somthing went wrong, please try again later!",
+          });
+        });
     }
   };
 
   return (
     <div className="manage-events">
-      <div className="top-main-head d-flex justify-content-between mb-3" style={{backgroundColor:"rgb(218 230 233)"}}>
-        <h3 style={{fontSize:"26px", color:"rgb(51 84 95)"}}>Manage Events</h3>
-        <Link to={"add"} class="add-button">
-          <span class="button__text">Add Event</span>
-          <span class="button__icon">+</span>
-        </Link>
-      </div>
-      <Table striped bordered hover style={{fontSize:"16px"}}>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Event Name</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Seat Number</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((event, index) => (
-            <tr key={event._id}>
-              <td>{index + 1}</td>
-              <td>{event.title}</td>
-              <td>{event.description}</td>
-              <td>{event.date}</td>
-              <td>{event.time}</td>
-              <td>{event.seatNumber}</td>
-              <td>
-                <button
-                  onClick={() => handleDelete(event._id)}
-                  className="btn btn-danger"
-                >
-                  Delete
-                </button>
-                <Link
-                  to={`update/${event._id}`}
-                  className="btn btn-success mx-1"
-                >
-                  Update
-                </Link>
-                <Link to={`view/${event._id}`} className="btn btn-info">
-                  view
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      {events.err && <Alert variant="danger">{events.err}</Alert>}
+      {events.loading ? (
+        <Loader />
+      ) : (
+        <>
+          <div
+            className="top-main-head d-flex justify-content-between mb-3"
+            style={{ backgroundColor: "rgb(218 230 233)" }}
+          >
+            <h3 style={{ fontSize: "23px", color: "rgb(51 84 95)" }}>
+              Manage Events <MdEventNote fontSize={"28px"} style={{marginBottom:"3px"}}/>
+            </h3>
+            <Link to={"add"} class="add-button">
+              <span class="button__text">Add Event</span>
+              <span class="button__icon">+</span>
+            </Link>
+          </div>
+
+          <Table striped bordered hover style={{ fontSize: "16px" }}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Event Name</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Seat Number</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {events.map((event, index) => (
+                <tr key={event._id}>
+                  <td>{index + 1}</td>
+                  <td>{event.title}</td>
+                  <td>{event.description}</td>
+                  <td>{event.date}</td>
+                  <td>{event.time}</td>
+                  <td>{event.seatNumber}</td>
+                  <td>
+                    <button
+                      onClick={(e) => {
+                        deleteEvent(event._id);
+                      }}
+                      className="add-button"
+                      style={{border:"#471a1a",boxShadow:"#471a1a", backgroundColor:"#f1d7d7" }}
+                    >
+                      <span className="button__text" style={{color:"#471a1a"}}>Delete</span>
+                      <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)"}}><RiDeleteBin3Line /></span>
+                    </button>
+                    <Link to={`${event._id}`} 
+                      className="add-button"
+                      style={{border:"#471a1a",boxShadow:"#1a3f47", backgroundColor:"#d7e6f1" }}
+                    >
+                      <span className="button__text" style={{color:"#1a3f47"}}>Update</span>
+                      <span className="button__icon" style={{color:"#1a3f47", backgroundColor:"rgb(36, 70, 134)"}}><MdOutlineTipsAndUpdates /></span>
+                    </Link>
+                    {/* <Link to={`/${event._id}`} className="btn btn-info">
+                      view
+                    </Link> */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </>
+      )}
     </div>
   );
 }
+
+// useEffect(() => {
+//   fetchEvents();
+// }, []);
+
+// const fetchEvents = async () => {
+//   try {
+//     const response = await fetch("/api/events");
+//     const data = await response.json();
+//     setEvents(data);
+//   } catch (error) {
+//     console.error("Error fetching events:", error);
+//   }
+// };
+
+// const handleDelete = async (eventId) => {
+//   try {
+//     const response = await fetch(`/api/events/${eventId}`, {
+//       method: "DELETE",
+//     });
+
+//     if (response.ok) {
+//       fetchEvents();
+//     } else {
+//       // Handle error
+//     }
+//   } catch (error) {
+//     console.error("Error deleting event:", error);
+//   }
+// };
 
 // import React, { useState, useEffect } from 'react';
 // import '../../../App.css';
@@ -274,5 +344,6 @@ export default function ManageEvents() {
 //         </tbody>
 //       </table>
 //     </div>
-//   );
-// }
+//   );
+// }
+
