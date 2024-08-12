@@ -1,112 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import '../../../App.css';
+import React, { useState, useEffect } from "react";
+import "../../../App.css";
+import { Alert } from "react-bootstrap";
+import { getAuthUser } from "../../../helper/Storage";
+import Loader from "../../../Components/Loader";
+import axios from "axios";
 
 export default function AddEvent() {
-  const [events, setEvents] = useState([]);
-  const [eventData, setEventData] = useState({ title: '', description: '', date: '', time: '', seatNumber: '' });
-  const [isEditing, setIsEditing] = useState(false);
-  const [editEventId, setEditEventId] = useState(null);
+  const auth = getAuthUser();
 
+  const [eventData, setEventData] = useState({
+    loading: false,
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    seatNumber:"",
+    err: "",
+    success: null,
+    reload:false,
+  });
+
+  // HITTING API
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    setEventData({ ...eventData, loading: true });
+    axios.get("/api/events")
+      .then((resp) => {
+        setEventData({ ...eventData, results: resp.data, loading: false });
+      })
+      .catch((err) => {
+        setEventData({
+          ...eventData,
+          loading: false,
+          err: "somthing went wrong, please try again later!",
+        });
+      });
+  }, [eventData.reload]);
 
-  const fetchEvents = async () => {
-    try {
-      const response = await fetch('/api/events');
-      const data = await response.json();
-      setEvents(data);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    }
-  };
-
+  //HANDLE CHANGE
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEventData({ ...eventData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  //CREATE EVENT ON SUBMIT 
+  const createEvent = (e) => {
     e.preventDefault();
-    if (isEditing) {
-      await updateEvent();
-    } else {
-      await createEvent();
-    }
-  };
-
-  const createEvent = async () => {
-    try {
-      const response = await fetch('/api/events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    setEventData({ ...eventData, loading: true });
+    const formData = new formData();
+    formData.append("title", eventData.title);
+    formData.append("description", eventData.description);
+    formData.append("date", eventData.date);
+    formData.append("time", eventData.time);
+    formData.append("seatNumber", eventData.seatNumber);
+    axios
+      .post("/api/eventData", formData, {
+        header: {
+          token: auth.token,
         },
-        body: JSON.stringify(eventData),
+      })
+      .then((resp) => {
+        setEventData({ ...eventData, success: "Event Created Successfully" });
+      })
+      .catch((err) => {
+        setEventData({
+          ...eventData,
+          success: null,
+          err: "some thing went wrong, please try again later!",
+        });
       });
-
-      if (response.ok) {
-        fetchEvents();
-        setEventData({ title: '', description: '', date: '', time: '', seatNumber: '' });
-      } else {
-        // Handle error
-      }
-    } catch (error) {
-      console.error('Error creating event:', error);
-    }
-  };
-
-  const updateEvent = async () => {
-    try {
-      const response = await fetch(`/api/events/${editEventId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(eventData),
-      });
-
-      if (response.ok) {
-        fetchEvents();
-        setEventData({ title: '', description: '', date: '', time: '', seatNumber: '' });
-        setIsEditing(false);
-        setEditEventId(null);
-      } else {
-        // Handle error
-      }
-    } catch (error) {
-      console.error('Error updating event:', error);
-    }
-  };
-
-  const handleEdit = (event) => {
-    setEventData({ title: event.title, description: event.description, date: event.date, time: event.time, seatNumber: event.seatNumber });
-    setIsEditing(true);
-    setEditEventId(event._id);
-  };
-
-  const handleDelete = async (eventId) => {
-    try {
-      const response = await fetch(`/api/events/${eventId}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        fetchEvents();
-      } else {
-        // Handle error
-      }
-    } catch (error) {
-      console.error('Error deleting event:', error);
-    }
   };
 
   return (
     <div className="manage-events-container">
       <div className="add-nav">
-        <h3 style={{fontSize:"26px"}}>Add Event</h3>
+        <h3 style={{ fontSize: "23px" }}>Add Event</h3>
       </div>
-      <form onSubmit={handleSubmit} className="manage-events-form">
+      <form onSubmit={createEvent} className="manage-events-form">
+        {eventData.err && (
+          <Alert variant={"danger"} className="auth-alert w-100">
+            {eventData.err}
+          </Alert>
+        )}
+        {eventData.success && (
+          <Alert variant={"success"} className="auth-alert w-100">
+            {eventData.success}
+          </Alert>
+        )}
         <input
           type="text"
           name="title"
@@ -150,41 +129,87 @@ export default function AddEvent() {
           className="manage-events-input"
         />
         <button type="submit" className="manage-events-button">
-          {isEditing ? 'Update Event' : 'Create Event'}
+          Create Event
         </button>
       </form>
-      {/* <table className="event-list-table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Seat Number</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((event) => (
-            <tr key={event._id} className="event-list-item">
-              <td>{event.title}</td>
-              <td>{event.description}</td>
-              <td>{event.date}</td>
-              <td>{event.time}</td>
-              <td>{event.seatNumber}</td>
-              <td>
-                <button onClick={() => handleEdit(event)} className="edit-button">Edit</button>
-                <button onClick={() => handleDelete(event._id)} className="delete-button">Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
     </div>
   );
 }
 
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//   if (isEditing) {
+//     await updateEvent();
+//   } else {
+//     await createEvent();
+//   }
+// };
 
+// const createEvent = async () => {
+//   try {
+//     const response = await fetch('/api/events', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(eventData),
+//     });
+
+//     if (response.ok) {
+//       fetchEvents();
+//       setEventData({ title: '', description: '', date: '', time: '', seatNumber: '' });
+//     } else {
+//       // Handle error
+//     }
+//   } catch (error) {
+//     console.error('Error creating event:', error);
+//   }
+// };
+
+// const updateEvent = async () => {
+//   try {
+//     const response = await fetch(`/api/events/${editEventId}`, {
+//       method: 'PUT',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify(eventData),
+//     });
+
+//     if (response.ok) {
+//       fetchEvents();
+//       setEventData({ title: '', description: '', date: '', time: '', seatNumber: '' });
+//       setIsEditing(false);
+//       setEditEventId(null);
+//     } else {
+//       // Handle error
+//     }
+//   } catch (error) {
+//     console.error('Error updating event:', error);
+//   }
+// };
+
+// const handleEdit = (event) => {
+//   setEventData({ title: event.title, description: event.description, date: event.date, time: event.time, seatNumber: event.seatNumber });
+//   setIsEditing(true);
+//   setEditEventId(event._id);
+// };
+
+// const handleDelete = async (eventId) => {
+//   try {
+//     const response = await fetch(`/api/events/${eventId}`, {
+//       method: 'DELETE',
+//     });
+
+//     if (response.ok) {
+//       fetchEvents();
+//     } else {
+//       // Handle error
+//     }
+//   } catch (error) {
+//     console.error('Error deleting event:', error);
+//   }
+// };
 
 // import React from 'react';
 // import Button from 'react-bootstrap/Button';
@@ -217,5 +242,5 @@ export default function AddEvent() {
 //         </div>
 //     </section>
 //   </div>
-//   )
-// }
+//   )
+// }
