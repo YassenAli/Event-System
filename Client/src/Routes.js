@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
 import NotFound from "./Components/NotFound";
-import BookedEvent from "./Pages/User/BookedEvent";
+// import BookedEvent from "./Pages/User/BookedEvent";
 import Home from "./Pages/Home";
 import ManageUser from "./Pages/Admin/Manage User/ManageUser";
 import AUserBookings from "./Pages/Admin/AUserBookings";
@@ -81,10 +81,10 @@ export const router = createBrowserRouter([
         path: "events",
         element: <Home />,
       },
-      {
-        path: "bookedevent",
-        element: <BookedEvent />,
-      },
+      // {
+      //   path: "bookedevent",
+      //   element: <BookedEvent />,
+      // },
       {
         index: true,
         element: <Navigate to="user-bookings" replace />,

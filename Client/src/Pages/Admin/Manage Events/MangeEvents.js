@@ -21,6 +21,8 @@ export default function ManageEvents() {
     reload: 0,
   });
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     setEvents({ ...events, loading: true });
     axios
@@ -42,7 +44,7 @@ export default function ManageEvents() {
       axios
         .delete("/api/events/" + id, {
           headers: {
-            token: auth.token,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((resp) => {
@@ -86,19 +88,19 @@ export default function ManageEvents() {
                 <th>Description</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Seat Number</th>
+                <th>location</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {events.map((event, index) => (
+              {events.results.map((event, index) => (
                 <tr key={event._id}>
                   <td>{index + 1}</td>
-                  <td>{event.title}</td>
+                  <td>{event.name}</td>
                   <td>{event.description}</td>
                   <td>{event.date}</td>
                   <td>{event.time}</td>
-                  <td>{event.seatNumber}</td>
+                  <td>{event.location}</td>
                   <td>
                     <button
                       onClick={(e) => {

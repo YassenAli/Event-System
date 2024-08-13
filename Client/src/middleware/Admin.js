@@ -7,5 +7,5 @@ export default function Admin() {
     const auth= getAuthUser();
 return (
     <>
-    {auth && auth.role === 1? <Outlet /> : <Navigate to={'/'}/>}</>
+    {auth ? <Outlet /> : <Navigate to={'/'}/>}</>
 )}

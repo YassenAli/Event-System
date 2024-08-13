@@ -13,11 +13,11 @@ export default function UpdateEvent() {
 
   const [eventData, setEventData] = useState({ 
     loading: false,
-    title: '', 
+    name: '', 
     description: '', 
     date: '', 
     time: '', 
-    seatNumber:'',
+    location:'',
     err: '',
     success :null,
     reload:false,
@@ -29,11 +29,11 @@ export default function UpdateEvent() {
     axios.get("/api/events" + id).then((resp) => {
         setEventData({
           ...eventData,
-          title: resp.data.title, 
+          name: resp.data.name, 
           description: resp.data.description, 
           date: resp.data.date, 
           time: resp.data.time,
-          seatNumber: resp.data.seatNumber 
+          location: resp.data.location
           
         });
       })
@@ -49,19 +49,20 @@ export default function UpdateEvent() {
 
   const updateEvent = (e) =>{
     e.preventDefault();
-    setEventData({...eventData, loading:true})
-    const formData = new formData();
-    formData.append("title", eventData.title);
+    setEventData({...eventData, loading:true});
+    const token = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append("name", eventData.name);
     formData.append("description", eventData.description);
     formData.append("date", eventData.date);
     formData.append("time", eventData.time);
-    formData.append("seatNumber", eventData.seatNumber);
+    formData.append("location", eventData.location);
 
-    axios.put("/api/eventData" + id,formData,
+    axios.put("/api/events" + id,formData,
       {
-        header:{
-          token: auth.token
-        }  
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     )
     .then((resp) => { setEventData({ ...eventData,reload: eventData.reload +1 , success: "Event Updated Successfully"  });  })
@@ -70,10 +71,10 @@ export default function UpdateEvent() {
   }
 
 
-    const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEventData({ ...eventData, [name]: value });
-  };
+  //   const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setEventData({ ...eventData, [name]: value });
+  // };
   
 
   return (
@@ -82,10 +83,10 @@ export default function UpdateEvent() {
         <h3 style={{fontSize:"23px"}}>Update Event</h3>
       </div>
       <Ticket
-          title={eventData.title}
+          name={eventData.name}
           date={eventData.date}
           time={eventData.time}
-          seatNumber={eventData.seatNumber}
+          location={eventData.location}
           description={eventData.description}/>
 
       <form onSubmit={updateEvent} className="manage-events-form">
@@ -101,17 +102,17 @@ export default function UpdateEvent() {
         )}
         <input
           type="text"
-          name="title"
-          value={eventData.title}
-          onChange={handleChange}
-          placeholder="Title"
+          name="name"
+          value={eventData.name}
+          onChange={(e) => setEventData({...eventData, name: e.target.value})} //onChange={(e) => setEventData({...eventData, name: e.target.value})}
+          placeholder="name"
           required
           className="manage-events-input"
         />
         <textarea
           name="description"
           value={eventData.description}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...eventData, description: e.target.value})}
           placeholder="Description"
           required
           className="manage-events-input"
@@ -120,7 +121,7 @@ export default function UpdateEvent() {
           type="date"
           name="date"
           value={eventData.date}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...eventData, date: e.target.value})}
           required
           className="manage-events-input"
         />
@@ -128,21 +129,20 @@ export default function UpdateEvent() {
           type="time"
           name="time"
           value={eventData.time}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...eventData, time: e.target.value})}
           required
           className="manage-events-input"
         />
         <input
           type="text"
-          name="seatNumber"
-          value={eventData.seatNumber}
-          onChange={handleChange}
-          placeholder="Seat Number"
+          name="location"
+          value={eventData.location}
+          onChange={(e) => setEventData({...eventData, location: e.target.value})}
+          placeholder="location"
           required
           className="manage-events-input"
         />
         <button type="submit" className="manage-events-button">
-          {/* {isEditing ? 'Update Event' : 'Create Event'} */}
           Update Event
         </button>
       </form>
