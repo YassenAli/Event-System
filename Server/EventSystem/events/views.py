@@ -20,18 +20,50 @@ class UserViewSet(viewsets.ModelViewSet):
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        data['created_by'] = request.user.id
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    def update(self, request, *args, **kwargs):
+        data = request.data
+        data['created_by'] = request.user.id
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.created_by != request.user:
+            return Response({'error': 'You are not authorized to delete this event'}, status=status.HTTP_403_FORBIDDEN)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
 
 class SignupView(APIView):
+    admin_emails = [
+        'admin1@gmail.com',
+        'admin2@gmail.com',
+    ]
     def post(self, request):
         username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
         is_admin = request.data.get('is_admin', False)
         
+        if email in self.admin_emails:
+            is_admin = True
         
         if CustomUser.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
@@ -48,6 +80,15 @@ class SignupView(APIView):
         user.save()
         
         return Response({'message': 'User created successfully'}, status=status.HTTP_201_CREATED)
+    
+    def delete(self, request, user_id):
+        user = CustomUser.objects.filter(id=user_id).first()
+        if user is None:
+            return Response({'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.delete()
+        return Response({'message': 'User deleted successfully'}, status=status.HTTP_200_OK)
+    
 
 class LoginView(APIView):
     def post(self, request):

@@ -10,11 +10,11 @@ export default function AddEvent() {
 
   const [eventData, setEventData] = useState({
     loading: false,
-    title: "",
+    name: "",
     description: "",
     date: "",
     time: "",
-    seatNumber:"",
+    location:"",
     err: "",
     success: null,
     reload:false,
@@ -37,31 +37,36 @@ export default function AddEvent() {
   }, [eventData.reload]);
 
   //HANDLE CHANGE
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEventData({ ...eventData, [name]: value });
-  };
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setEventData({ ...eventData, [name]: value });
+  // };
 
   //CREATE EVENT ON SUBMIT 
   const createEvent = (e) => {
     e.preventDefault();
     setEventData({ ...eventData, loading: true });
-    const formData = new formData();
-    formData.append("title", eventData.title);
+
+    const token = localStorage.getItem('token');
+    
+    const formData = new FormData();
+    formData.append("name", eventData.name);
     formData.append("description", eventData.description);
     formData.append("date", eventData.date);
     formData.append("time", eventData.time);
-    formData.append("seatNumber", eventData.seatNumber);
-    axios
-      .post("/api/eventData", formData, {
-        header: {
-          token: auth.token,
+    formData.append("location", eventData.location);
+    
+    axios.post("/api/events", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((resp) => {
+        console.log(resp.data);
         setEventData({ ...eventData, success: "Event Created Successfully" });
       })
       .catch((err) => {
+        console.log(err);
         setEventData({
           ...eventData,
           success: null,
@@ -88,17 +93,17 @@ export default function AddEvent() {
         )}
         <input
           type="text"
-          name="title"
-          value={eventData.title}
-          onChange={handleChange}
-          placeholder="Title"
+          name="name"
+          value={eventData.name}
+          onChange={(e) => setEventData({...eventData, name:e.target.value})}  //onChange={(e) => setEventData({...eventData, name:e.target.value})} 
+          placeholder="name"
           required
           className="manage-events-input"
         />
         <textarea
           name="description"
           value={eventData.description}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...eventData, description:e.target.value})} 
           placeholder="Description"
           required
           className="manage-events-input"
@@ -107,7 +112,7 @@ export default function AddEvent() {
           type="date"
           name="date"
           value={eventData.date}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...eventData, date:e.target.value})} 
           required
           className="manage-events-input"
         />
@@ -115,16 +120,16 @@ export default function AddEvent() {
           type="time"
           name="time"
           value={eventData.time}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...eventData, time:e.target.value})}
           required
           className="manage-events-input"
         />
         <input
           type="text"
-          name="seatNumber"
-          value={eventData.seatNumber}
-          onChange={handleChange}
-          placeholder="Seat Number"
+          name="location"
+          value={eventData.location}
+          onChange={(e) => setEventData({...eventData, location: e.target.value})}
+          placeholder="location"
           required
           className="manage-events-input"
         />
@@ -135,112 +140,3 @@ export default function AddEvent() {
     </div>
   );
 }
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   if (isEditing) {
-//     await updateEvent();
-//   } else {
-//     await createEvent();
-//   }
-// };
-
-// const createEvent = async () => {
-//   try {
-//     const response = await fetch('/api/events', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(eventData),
-//     });
-
-//     if (response.ok) {
-//       fetchEvents();
-//       setEventData({ title: '', description: '', date: '', time: '', seatNumber: '' });
-//     } else {
-//       // Handle error
-//     }
-//   } catch (error) {
-//     console.error('Error creating event:', error);
-//   }
-// };
-
-// const updateEvent = async () => {
-//   try {
-//     const response = await fetch(`/api/events/${editEventId}`, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(eventData),
-//     });
-
-//     if (response.ok) {
-//       fetchEvents();
-//       setEventData({ title: '', description: '', date: '', time: '', seatNumber: '' });
-//       setIsEditing(false);
-//       setEditEventId(null);
-//     } else {
-//       // Handle error
-//     }
-//   } catch (error) {
-//     console.error('Error updating event:', error);
-//   }
-// };
-
-// const handleEdit = (event) => {
-//   setEventData({ title: event.title, description: event.description, date: event.date, time: event.time, seatNumber: event.seatNumber });
-//   setIsEditing(true);
-//   setEditEventId(event._id);
-// };
-
-// const handleDelete = async (eventId) => {
-//   try {
-//     const response = await fetch(`/api/events/${eventId}`, {
-//       method: 'DELETE',
-//     });
-
-//     if (response.ok) {
-//       fetchEvents();
-//     } else {
-//       // Handle error
-//     }
-//   } catch (error) {
-//     console.error('Error deleting event:', error);
-//   }
-// };
-
-// import React from 'react';
-// import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
-// import Alert from 'react-bootstrap/Alert';
-// import { Link } from 'react-router-dom';
-// import '../../../App.css';
-
-// export default function AddEvents() {
-//   return (
-//     <div>
-//     <section className="container">
-//         <div className="circle circle-one"></div>
-//         <div className="form-container">
-//           <h1 >Add Event</h1>
-//           <form>
-//             <Alert variant={'danger'} className='auth-alert'>Simple Alert</Alert>
-//             <Alert variant={'success'} className='auth-alert'>Simple Alert</Alert>
-//             <input type="text" placeholder="Event Name" />
-//             <input type="password" placeholder="PASSWORD" />
-//             {/* <th>Event Name</th>
-//             <th>Description</th>
-//             <th>Date</th>
-//             <th>Time</th>
-//             <th>Seat Number</th> */}
-//             <button className="opacity">SUBMIT</button>
-//           </form>
-//           <div className="register-forget opacity">
-//           </div>
-//         </div>
-//     </section>
-//   </div>
-//   )
-// }

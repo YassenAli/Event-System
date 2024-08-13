@@ -18,10 +18,11 @@ export default function ManageUser() {
     reload: 0,
   });
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
     setUsers({ ...users, loading: true });
-    axios
-      .get("/api/users")
+    axios.get("/api/signup/")
       .then((resp) => {
         setUsers({ ...users, results: resp.data, loading: false });
       })
@@ -37,9 +38,9 @@ export default function ManageUser() {
   const deleteUser = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       axios
-        .delete("/api/users/" + id, {
+        .delete("/api/signup/" + id, {
           headers: {
-            token: auth.token,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then(() => {

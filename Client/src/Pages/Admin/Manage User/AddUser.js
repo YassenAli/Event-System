@@ -26,7 +26,7 @@ export default function AddUser() {
 
   useEffect(() => {
     setUserData({ ...userData, loading: true });
-    axios.get("/api/users")
+    axios.get("/api/signup/")
       .then((resp) => {
         setUserData({ ...userData, results: resp.data, loading: false });
       })
@@ -39,37 +39,28 @@ export default function AddUser() {
       });
   }, [userData.reload]);
 
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const response = await fetch('/api/users');
-  //     const data = await response.json();
-  //     setUsers(data);
-  //   } catch (error) {
-  //     console.error('Error fetching users:', error);
-  //   }
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUserData({ ...userData, [name]: value });
   // };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
 
     //CREATE EVENT ON SUBMIT 
     const createUser = (e) => {
       e.preventDefault();
       setUserData({ ...userData, loading: true });
+      
+
+      const token = localStorage.getItem('token');
+
       const formData = new formData();
       formData.append("username", userData.username);
       formData.append("email", userData.email);
       formData.append("password", userData.password);
-      axios.post("/api/users", formData, {
-          header: {
-            token: auth.token,
-          },
+      axios.post("/api/signup/", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         })
         .then((resp) => {
           setUserData({ ...userData, success: "User Created Successfully" });
@@ -83,82 +74,6 @@ export default function AddUser() {
         });
     };
 
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   if (isEditing) {
-  //     await updateUser();
-  //   } else {
-  //     await createUser();
-  //   }
-  // };
-
-  // const createUser = async () => {
-  //   try {
-      
-  //     const response = await fetch('/api/users', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(userData),
-  //     });
-
-  //     if (response.ok) {
-  //       await fetchUsers();
-  //       setUserData({ username: '', email: '', password: '' });
-  //     } else {
-  //       // Handle error
-  //     }
-  //   } catch (error) {
-  //     console.error('Error creating user:', error);
-  //   }
-  // };
-
-  // const updateUser = async () => {
-  //   try {
-  //     const response = await fetch(`/api/users/${editUserId}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(userData),
-  //     });
-
-  //     if (response.ok) {
-  //       fetchUsers();
-  //       setUserData({ username: '', email: '', password: '' });
-  //       setIsEditing(false);
-  //       setEditUserId(null);
-  //     } else {
-  //       // Handle error
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating user:', error);
-  //   }
-  // };
-
-  // const handleEdit = (user) => {
-  //   setUserData({ username: user.username, email: user.email, password: '' });
-  //   setIsEditing(true);
-  //   setEditUserId(user._id);
-  // };
-
-  // const handleDelete = async (userId) => {
-  //   try {
-  //     const response = await fetch(`/api/users/${userId}`, {
-  //       method: 'DELETE',
-  //     });
-
-  //     if (response.ok) {
-  //       fetchUsers();
-  //     } else {
-  //       // Handle error
-  //     }
-  //   } catch (error) {
-  //     console.error('Error deleting user:', error);
-  //   }
-  // };
 
   return (
     <div className="manage-user-container">
@@ -184,7 +99,7 @@ export default function AddUser() {
           type="text"
           name="username"
           value={userData.username}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...userData, username: e.target.value})} //onChange={(e) => setEventData({...userData, username: e.target.value})}
           placeholder="Username"
           required
           className="manage-user-input"
@@ -195,7 +110,7 @@ export default function AddUser() {
           type="email"
           name="email"
           value={userData.email}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...userData, email: e.target.value})}
           placeholder="Email"
           required
           className="manage-user-input"
@@ -206,7 +121,7 @@ export default function AddUser() {
           type="password"
           name="password"
           value={userData.password}
-          onChange={handleChange}
+          onChange={(e) => setEventData({...userData, password: e.target.value})}
           placeholder="Password"
           required
           className="manage-user-input"
@@ -215,22 +130,12 @@ export default function AddUser() {
         </Col>
         <Col sm={1}>
 	      <button type="submit" className="manage-user-button">
-          {/* {isEditing ? 'Update User' : 'Add'} */}
           Create User
         </button>
         </Col>
       </Row>
     </Container>
       </form>
-      {/* <div className="user-list">
-        {users.map((user) => (
-          <div key={user._id} className="user-list-item">
-            <span>{user.username} ({user.email})</span>
-            <button onClick={() => handleEdit(user)} className="edit-button">Edit</button>
-            <button onClick={() => handleDelete(user._id)} className="delete-button">Delete</button>
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 }
@@ -241,7 +146,7 @@ export default function AddUser() {
 /* Backend */
 
 // // Create a new user
-// app.post('/api/users', async (req, res) => {
+// app.post('/api/signup/', async (req, res) => {
 //   const { username, email, password } = req.body;
 //   const newUser = new User({ username, email, password });
 //   await newUser.save();
@@ -249,13 +154,13 @@ export default function AddUser() {
 // });
 
 // // Get all users
-// app.get('/api/users', async (req, res) => {
+// app.get('/api/signup/', async (req, res) => {
 //   const users = await User.find();
 //   res.status(200).json(users);
 // });
 
 // // Update a user
-// app.put('/api/users/:id', async (req, res) => {
+// app.put('/api/signup//:id', async (req, res) => {
 //   const { id } = req.params;
 //   const { username, email, password } = req.body;
 //   const updatedUser = await User.findByIdAndUpdate(id, { username, email, password }, { new: true });
@@ -263,7 +168,7 @@ export default function AddUser() {
 // });
 
 // // Delete a user
-// app.delete('/api/users/:id', async (req, res) => {
+// app.delete('/api/signup//:id', async (req, res) => {
 //   const { id } = req.params;
 //   await User.findByIdAndDelete(id);
 //   res.status(204).send();

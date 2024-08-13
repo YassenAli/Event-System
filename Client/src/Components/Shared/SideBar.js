@@ -33,7 +33,7 @@ return (
 
     {
         /* Admin Routes */
-        auth && auth.role === 1 && (
+        auth && (
         <>
             {/* to show Booked Events by Users */}
             <Link to="user-bookings" className="user-dashboard__sidebar-link">

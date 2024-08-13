@@ -8,11 +8,11 @@ const Ticket = ({ props, isBooked, handleCancel }) => {
       <div className="ticket ticketLeft">
         <h1 className='ticket-title'>Event <span>Booking</span></h1>
         <div className="eventTitle">
-          <h2>{props.title}</h2>
+          <h2>{props.name}</h2>
           <span><p>{props.description}</p></span>
         </div>
-        <div className="seatNumber">
-          <h2>{props.seatNumber}</h2>
+        <div className="location">
+          <h2>{props.location}</h2>
           <span>Seat</span>
         </div>
         <div className="showTime">
@@ -27,8 +27,8 @@ const Ticket = ({ props, isBooked, handleCancel }) => {
       <div className="ticket ticketRight">
         <div className="eye"></div>
         <div className="ticketNumber">
-          <h3>{props.seatNumber}</h3>
-          <span>Seat</span>
+          <h3>{props.location}</h3>
+          <span>location</span>
         </div>
         {/* Conditional Cancel Button */}
         {isBooked && (
@@ -50,13 +50,13 @@ export default Ticket;
 //   return (
 //     <div className="ticketWrap">
 //       <div className="ticket ticketLeft">
-//         <h1 className='ticket-title'>Event <span>Booking</span></h1>
-//         <div className="eventTitle">
-//           <h2>{props.title}</h2>
+//         <h1 className='ticket-name'>Event <span>Booking</span></h1>
+//         <div className="eventname">
+//           <h2>{props.name}</h2>
 //           <span><p>{props.description}</p></span>
 //         </div>
-//         <div className="seatNumber">
-//           <h2>{props.seatNumber}</h2>
+//         <div className="location">
+//           <h2>{props.location}</h2>
 //           <span>Seat</span>
 //         </div>
 //         <div className="showTime">
@@ -71,7 +71,7 @@ export default Ticket;
 //       <div className="ticket ticketRight">
 //         <div className="eye"></div>
 //         <div className="ticketNumber">
-//           <h3>{props.seatNumber}</h3>
+//           <h3>{props.location}</h3>
 //           <span>Seat</span>
 //         </div>
 //         <button className='ticket-btn'>Ticket</button>
