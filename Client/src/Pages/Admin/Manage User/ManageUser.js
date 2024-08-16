@@ -3,7 +3,7 @@ import "../../../App.css";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { getAuthUser } from "../../../helper/Storage";
+import { getAuthUser, getAccessToken, getRefreshToken } from "../../../helper/Storage";
 import Alert from "react-bootstrap/Alert";
 import Loader from "../../../Components/Loader";
 import { TiUserAddOutline } from "react-icons/ti";
@@ -18,11 +18,10 @@ export default function ManageUser() {
     reload: 0,
   });
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
     setUsers({ ...users, loading: true });
-    axios.get("/api/signup/")
+    axios
+      .get("http://127.0.0.1:8000/api/users")
       .then((resp) => {
         setUsers({ ...users, results: resp.data, loading: false });
       })
@@ -38,9 +37,9 @@ export default function ManageUser() {
   const deleteUser = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       axios
-        .delete("/api/signup/" + id, {
+        .delete("http://127.0.0.1:8000/api/users/", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${getAccessToken()}`,
           },
         })
         .then(() => {
@@ -86,13 +85,13 @@ export default function ManageUser() {
             </thead>
             <tbody>
               {users.results.map((user, index) => (
-                <tr key={user._id}>
+                <tr key={user.id}>
                   <td>{index + 1}</td>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>
                     <button
-                      onClick={() => deleteUser(user._id)}
+                      onClick={() => deleteUser(user.id)}
                       className="add-button"
                       style={{border:"#471a1a",boxShadow:"#471a1a", backgroundColor:"#f1d7d7" }}
                     >
@@ -107,5 +106,6 @@ export default function ManageUser() {
         </>
       )}
     </div>
-  );
+  );
 }
+

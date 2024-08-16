@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../../App.css";
 import { Alert } from "react-bootstrap";
-import { getAuthUser } from "../../../helper/Storage";
+import { getAuthUser, getAccessToken } from "../../../helper/Storage";
 import Loader from "../../../Components/Loader";
 import axios from "axios";
 
@@ -14,16 +14,23 @@ export default function AddEvent() {
     description: "",
     date: "",
     time: "",
-    location:"",
+    location: "",
     err: "",
     success: null,
-    reload:false,
+    reload: false,
   });
 
   // HITTING API
   useEffect(() => {
     setEventData({ ...eventData, loading: true });
-    axios.get("/api/events")
+    axios
+      .get("http://127.0.0.1:8000/api/events/",
+        {
+          headers: {
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        }
+      )
       .then((resp) => {
         setEventData({ ...eventData, results: resp.data, loading: false });
       })
@@ -34,35 +41,32 @@ export default function AddEvent() {
           err: "somthing went wrong, please try again later!",
         });
       });
-  }, [eventData.reload]);
+  }, []);
 
   //HANDLE CHANGE
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setEventData({ ...eventData, [name]: value });
-  // };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEventData({ ...eventData, [name]: value });
+  };
 
-  //CREATE EVENT ON SUBMIT 
+  //CREATE EVENT ON SUBMIT
   const createEvent = (e) => {
     e.preventDefault();
     setEventData({ ...eventData, loading: true });
-
-    const token = localStorage.getItem('token');
-    
     const formData = new FormData();
     formData.append("name", eventData.name);
     formData.append("description", eventData.description);
     formData.append("date", eventData.date);
     formData.append("time", eventData.time);
     formData.append("location", eventData.location);
-    
-    axios.post("/api/events", formData, {
+    axios
+      .post("http://127.0.0.1:8000/api/events/", formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       })
       .then((resp) => {
-        console.log(resp.data);
+        console.log(resp)
         setEventData({ ...eventData, success: "Event Created Successfully" });
       })
       .catch((err) => {
@@ -95,7 +99,7 @@ export default function AddEvent() {
           type="text"
           name="name"
           value={eventData.name}
-          onChange={(e) => setEventData({...eventData, name:e.target.value})}  //onChange={(e) => setEventData({...eventData, name:e.target.value})} 
+          onChange={handleChange}
           placeholder="name"
           required
           className="manage-events-input"
@@ -103,7 +107,7 @@ export default function AddEvent() {
         <textarea
           name="description"
           value={eventData.description}
-          onChange={(e) => setEventData({...eventData, description:e.target.value})} 
+          onChange={handleChange}
           placeholder="Description"
           required
           className="manage-events-input"
@@ -112,7 +116,7 @@ export default function AddEvent() {
           type="date"
           name="date"
           value={eventData.date}
-          onChange={(e) => setEventData({...eventData, date:e.target.value})} 
+          onChange={handleChange}
           required
           className="manage-events-input"
         />
@@ -120,7 +124,7 @@ export default function AddEvent() {
           type="time"
           name="time"
           value={eventData.time}
-          onChange={(e) => setEventData({...eventData, time:e.target.value})}
+          onChange={handleChange}
           required
           className="manage-events-input"
         />
@@ -128,8 +132,8 @@ export default function AddEvent() {
           type="text"
           name="location"
           value={eventData.location}
-          onChange={(e) => setEventData({...eventData, location: e.target.value})}
-          placeholder="location"
+          onChange={handleChange}
+          placeholder="Location"
           required
           className="manage-events-input"
         />
@@ -138,5 +142,5 @@ export default function AddEvent() {
         </button>
       </form>
     </div>
-  );
+  );
 }

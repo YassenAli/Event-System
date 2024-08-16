@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './Components.css';
 
@@ -13,7 +12,7 @@ const Ticket = ({ props, isBooked, handleCancel }) => {
         </div>
         <div className="location">
           <h2>{props.location}</h2>
-          <span>Seat</span>
+          <span>Location</span>
         </div>
         <div className="showTime">
           <h2>{props.time}</h2>
