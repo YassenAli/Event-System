@@ -47,6 +47,17 @@ export default function Events() {
           err: "Something went wrong, please try again later!",
         });
       });
+
+    axios.get("http://127.0.0.1:8000/api/events/", {
+      params: {
+        search: search,
+      }
+    }).then((resp) => {
+      setEvents({ ...events, results: resp.data, loading: false });
+    }).catch((err) => {
+      setEvents({ ...events, loading: false, err: 'Something went wrong, please try again later!' });
+    });
+
   }, [events.reload]);
 
   useEffect(() => {
@@ -58,8 +69,13 @@ export default function Events() {
   const fetchBookings = async () => {
     setBookingLoading(true);
     try {
+
       const response = await axios.get("http://127.0.0.1:8000/api/bookings/", {
         params: { email: userEmail },
+
+      // const response = await axios.get(`http://127.0.0.1:8000/api/bookings`, {
+      //   params: { email: userEmail }
+
       });
       setBookings(response.data);
     } catch (error) {
@@ -77,6 +93,7 @@ export default function Events() {
     }
 
     try {
+
       const bookingData = {
         event: eventId,
         user: userEmail,
@@ -84,7 +101,13 @@ export default function Events() {
 
       console.log("Booking Event with:", bookingData);
 
-      const response = await axios.post("http://127.0.0.1:8000/api/bookings/", bookingData);
+      // const response = await axios.post("http://127.0.0.1:8000/api/bookings/", bookingData);
+
+      const response = await axios.post('http://127.0.0.1:8000/api/bookings', {
+        eventId,
+        email: userEmail,
+      });
+
 
       if (response.status === 200) {
         setJustBooked(true);
@@ -100,9 +123,13 @@ export default function Events() {
     try {
       const booking = bookings.find((booking) => booking.eventId === eventId);
       if (booking) {
+
         const response = await axios.delete(
           `http://127.0.0.1:8000/api/bookings/${booking._id}`
         );
+
+        // const response = await axios.delete(`http://127.0.0.1:8000/api/bookings/${booking._id}`);
+
 
         if (response.status === 200) {
           setJustBooked(true);
@@ -201,6 +228,19 @@ export default function Events() {
           </div>
         </>
       )}
+
+
+
+      {
+        !events.loading && !events.err && events.results.length === 0 && (
+          <div className="d-flex justify-content-center align-items-center">
+            <Alert variant="info" className="auth-alert text-center w-50">
+              There Is No Events 🎟!
+            </Alert>
+          </div>
+        )
+      }
+
     </div>
-  );
+  );
 }

@@ -10,10 +10,21 @@ const Ticket = ({ props, isBooked, handleCancel, handleBook }) => {
   return (
     <div className="ticketWrap">
       <div className="ticket ticketLeft">
+
         <h1 className='ticket-title'> {props.name}</h1>
         <div className="ticket-des">
           <span><IoTicketOutline style={{marginBottom:'4px',fontSize:'15px'}}/> DISCRIPTION</span>
           <p>{props.description}</p>
+
+        <h1 className='ticket-title'>Event <span>Booking</span></h1>
+        <div className="eventTitle">
+          <h2>{props.name}</h2>
+          <span><p>{props.description}</p></span>
+        </div>
+        <div className="location">
+          <h2>{props.location}</h2>
+          <span>Location</span>
+
         </div>
         <div className="showTime">
           <span><MdAccessTime style={{marginBottom:'4px'}}/> Time</span>
@@ -39,6 +50,7 @@ const Ticket = ({ props, isBooked, handleCancel, handleBook }) => {
         {!isBooked && (
           <button onClick={() => handleBook(props.id)} className="ticket-btn">Book</button>
         )}
+          </div>
       </div>
     </div>
   );

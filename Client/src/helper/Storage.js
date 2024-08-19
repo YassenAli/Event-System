@@ -1,3 +1,4 @@
+
 // COOKIES, LOCAL STORAGE
 export const setAuthUser = (data) => {
     console.log("setAuth", data);
@@ -18,20 +19,25 @@ export const getAuthUser = () => {
             console.error('Error parsing user data:', error);
             removeAuthUser(); // Remove corrupted data
         }
-    }
-    return null;
-};
+}};
+
+
 
 export const getAccessToken = () => {
     return localStorage.getItem("accessToken");
+
 };
+
+
 
 export const getRefreshToken = () => {
     return localStorage.getItem("refreshToken");
 };
 
-export const removeAuthUser = () => {
-    if (localStorage.getItem('user')) localStorage.removeItem('user');
+
+export const removeAuthUser = () =>{
+    if(localStorage.getItem('user')) localStorage.removeItem('user');
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-};
+}
+

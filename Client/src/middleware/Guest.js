@@ -10,5 +10,6 @@ return (
         {
             (!auth)? <Outlet /> : <Navigate to={'/'}/>
         }
+
     </>
 )}

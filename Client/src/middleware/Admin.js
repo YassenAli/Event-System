@@ -1,7 +1,7 @@
-import React from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
-import { getAuthUser, getAccessToken } from '../helper/Storage';
-import * as JWT from 'jwt-decode';
+import React from "react";
+import { Outlet, Navigate } from "react-router-dom";
+import { getAuthUser, getAccessToken } from "../helper/Storage";
+import * as JWT from "jwt-decode";
 
 // then use
 export default function Admin() {
@@ -9,7 +9,7 @@ export default function Admin() {
 
   let isAdmin = false;
 
-  console.log('admin.js auth', auth);
+  console.log("admin.js auth", auth);
 
   if (auth && getAccessToken()) {
     try {
@@ -23,9 +23,5 @@ export default function Admin() {
     console.error("Access token is missing or invalid.");
   }
 
-  return (
-    <>
-      {isAdmin ? <Outlet /> : <Navigate to={'/'}/>}
-    </>
-  );
+  return <>{isAdmin ? <Outlet /> : <Navigate to={"/"} />}</>;
 }
