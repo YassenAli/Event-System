@@ -1,10 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
 import NotFound from "./Components/NotFound";
-// import BookedEvent from "./Pages/User/BookedEvent";
 import Home from "./Pages/Home";
 import ManageUser from "./Pages/Admin/Manage User/ManageUser";
-import AUserBookings from "./Pages/Admin/AUserBookings";
+import ManageBookings from "./Pages/Admin/ManageBookings";
 import Login from './Components/Auth/Login';
 import AddEvent from "./Pages/Admin/Manage Events/AddEvent";
 import ManageEvents from "./Pages/Admin/Manage Events/MangeEvents";
@@ -56,7 +55,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "user-bookings",
-            element: <AUserBookings />,
+            element: <ManageBookings />,
           },
           {
             path: "/manage-events",
@@ -81,15 +80,6 @@ export const router = createBrowserRouter([
         path: "events",
         element: <Home />,
       },
-      // {
-      //   path: "bookedevent",
-      //   element: <BookedEvent />,
-      // },
-      {
-        index: true,
-        element: <Navigate to="user-bookings" replace />,
-      },
-
       {
         path: "*",
         element: <NotFound />,

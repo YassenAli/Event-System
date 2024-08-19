@@ -4,10 +4,11 @@ import { getAuthUser } from '../helper/Storage'
 
 export default function Guest() {
     const auth= getAuthUser();
+    console.log('guest', auth);
 return (
     <>
         {
             (!auth)? <Outlet /> : <Navigate to={'/'}/>
         }
-        </>
+    </>
 )}

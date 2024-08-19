@@ -421,7 +421,7 @@ body {
   flex-direction: column;
   gap: 15px;
 }
-
+/* 
 .event-list-item {
   padding: 15px;
   background-color: #f9f9f9;
@@ -462,7 +462,7 @@ body {
 
 .delete-button:hover {
   background-color: #c82333;
-}
+} */
 
 /*------ manage header ------- */
 .top-main-head{
@@ -475,7 +475,7 @@ border-radius: 15px;
   border-radius: 15px; */
   text-align: center;
 }
-/*----------------------- Loader.css -----------------------*/
+/*----------------------- Alerts.css -----------------------*/
 
 /*----------------------- Loader.css -----------------------*/
 

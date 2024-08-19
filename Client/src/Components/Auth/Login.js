@@ -11,8 +11,6 @@ function Login({ onLogin, errorMessage }) {
 
   const [isSignUp, setIsSignUp] = useState(false);
 
-
-
   const [login, setLogin ] =useState({
     // email:'',
     password:'',
@@ -21,6 +19,7 @@ function Login({ onLogin, errorMessage }) {
     err:[]
   }) 
   const [register, setRegister ] =useState({
+    // name:'',
     email:'',
     password:'',
     username:'',
@@ -33,21 +32,22 @@ function Login({ onLogin, errorMessage }) {
     e.preventDefault();
     setLogin({...Login, loading: true, err:[]})
     axios.post('http://127.0.0.1:8000/api/login/', {
+      // email: login.email,
       username: login.username,
       password: login.password
     }).then(resp => {
       setLogin({...Login, loading: false, err:[]})
-      setAuthUser(resp.data);
+      const { access, refresh } = resp.data;  // Extract tokens
+      console.log("Tokens:", access, refresh);
+      console.log("login data", resp.data)
+      setAuthUser({ accessToken: access, refreshToken: refresh });
+      // setAuthUser(resp.data);
       navigate('/');
 
     }).catch(errors => {
       console.log(errors)
       setLogin({...login, loading: false, err: errors.response?.data?.errors || [] });
     });}
-    // .catch(errors =>{
-    //   console.log(errors)
-    //   setLogin({...Login, loading: true, err:errors.response.data.errors})
-    // })}
 
     // REGISTER
     const RegisterFun = (e) =>{
@@ -57,16 +57,20 @@ function Login({ onLogin, errorMessage }) {
         email: register.email,
         username: register.username,
         password: register.password,
-        role: register.is_admin
+        // name: register.name
       }).then(resp => {
         setRegister({...register, loading: false, err:[]})
-        setAuthUser(resp.data);
+        const { access, refresh } = resp.data;
+        setAuthUser({ accessToken: access, refreshToken: refresh });
+        // setAuthUser(resp.data);
         navigate('/');
   
       }).catch(errors => {
         console.log(errors)
         setRegister({...register, loading: false, err: errors.response?.data?.errors || [] });
       });}
+
+
 
 
   const toggleForm = () => {
@@ -89,12 +93,17 @@ function Login({ onLogin, errorMessage }) {
                   <Alert key={index} variant={'danger'} >{error.msg}</Alert>
               ))}
 
+              {/* {login.loading === true && (
+                <Loader />
+              )} */}
               <form onSubmit={LoginFun} className="login-flip-card__form">
-
-                <input type="text" placeholder="Username" name="username" className="login-flip-card__input" value={login.username} onChange={(e) => setLogin({...login, username: e.target.value})} />
+                {
+                /* <input type="email" placeholder="Email" name="email" className="login-flip-card__input" value={login.email} onChange={(e) => setLogin({...login, email: e.target.value})} /> */}
+                { <input type="text" placeholder="Username" name="username" className="login-flip-card__input" value={login.username} onChange={(e) => setLogin({...login, username: e.target.value})} /> }
                 <input type="password" placeholder="Password" name="password" className="login-flip-card__input" value={login.password} onChange={(e) => setLogin({...login, password: e.target.value})} />
                 <button className="login-flip-card__btn" type='submit' disabled={login.loading === true }>Let's go!</button>
               </form>
+              {/* {errorMessage && <p className="login-error">{errorMessage}</p>} */}
             </div>
 
 
@@ -105,7 +114,9 @@ function Login({ onLogin, errorMessage }) {
               {register.err.map((error, index) => (
                   <Alert key={index} variant={'danger'} >{error.msg}</Alert>
               ))}
-   
+              {/* {register.loading === true && (
+                <Loader />
+              )} */}
               <form onSubmit={RegisterFun} className="login-flip-card__form">
               {/* #ff305d*/}
                 <input type="text" placeholder="Username" className="login-flip-card__input" value={register.username} onChange={(e) => setRegister({...register,username:e.target.value})} />
@@ -121,4 +132,4 @@ function Login({ onLogin, errorMessage }) {
   );
 }
 
-export default Login;
+export default Login;

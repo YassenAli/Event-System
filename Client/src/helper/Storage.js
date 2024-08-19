@@ -1,19 +1,37 @@
-//COOKIES, LOCAL STORAGE
-export const setAuthUser = (data) =>{
-    // save object to the local storage
-    //stringify boject ot text
-    localStorage.setItem("user", JSON.stringify(data))
-    localStorage.setItem('token', JSON.stringify(data).token);
-}
+// COOKIES, LOCAL STORAGE
+export const setAuthUser = (data) => {
+    console.log("setAuth", data);
+    // Storing the tokens and user data
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    localStorage.setItem("user", JSON.stringify(data));
+};
 
-export const getAuthUser = (data) =>{
-    // get object from the local storage
-    //parse boject ot text
-    if(localStorage.getItem('user')){
-        return JSON.parse(localStorage.getItem('user')).is_admin;
+export const getAuthUser = () => {
+    const user = localStorage.getItem('user');
+    if (user) {
+        try {
+            const parsedUser = JSON.parse(user);
+            console.log('Retrieved User:', parsedUser); // Check the user data
+            return parsedUser;
+        } catch (error) {
+            console.error('Error parsing user data:', error);
+            removeAuthUser(); // Remove corrupted data
+        }
     }
-}
+    return null;
+};
 
-export const removeAuthUser = () =>{
-    if(localStorage.getItem('user')) localStorage.removeItem('user');
-}
+export const getAccessToken = () => {
+    return localStorage.getItem("accessToken");
+};
+
+export const getRefreshToken = () => {
+    return localStorage.getItem("refreshToken");
+};
+
+export const removeAuthUser = () => {
+    if (localStorage.getItem('user')) localStorage.removeItem('user');
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+};
