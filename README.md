@@ -36,7 +36,6 @@ Event System is an event booking web application that allows users to sign up, l
 ## Team Members
 - **Yassin Ali:** Responsible for the back-end
 - **Youssef Ali:** Responsible for the front-end
-- **Rojeh Wael:** Responsible for the front-end
 
 ## Project Structure
 The project is divided into two main folders:
