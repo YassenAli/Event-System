@@ -37,7 +37,7 @@ export default function Events() {
 
   useEffect(() => {
     if (auth) {
-      fetchBookings();
+      // fetchBookings();
     }
   }, [auth]);
 
@@ -60,7 +60,7 @@ export default function Events() {
       });
 
       if (response.status === 200) {
-        fetchBookings();
+        // fetchBookings();
       } else {
         console.error('Error booking event');
       }
@@ -76,7 +76,7 @@ export default function Events() {
         const response = await axios.delete(`http://127.0.0.1:8000/api/bookings/${booking._id}`);
 
         if (response.status === 200) {
-          fetchBookings();
+          // fetchBookings();
         } else {
           console.error('Error canceling booking');
         }

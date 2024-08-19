@@ -7,14 +7,31 @@ import { HiTicket } from "react-icons/hi2";
 import { TbTicketOff } from "react-icons/tb";
 import { GoHome } from "react-icons/go";
 import { GrHomeRounded } from "react-icons/gr";
-
+import {jwtDecode} from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { getAuthUser } from "../../helper/Storage";
+import { getAuthUser, getAccessToken } from "../../helper/Storage";
 import "../../App.css";
 
 export default function SideBar() {
 const navigate = useNavigate();
 const auth = getAuthUser();
+
+
+let isAdmin = false;
+
+    console.log('accessToken', getAccessToken());
+    // console.log('authaccess', auth.accessToken)
+    if (auth && getAccessToken()) {
+        try {
+            const decodedToken = jwtDecode(getAccessToken());
+            isAdmin = decodedToken?.is_superuser || false;
+            console.log('decodedToken', decodedToken);
+            console.log('sidebar', isAdmin);
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    }
+
 
 return (
     <div className="user-dashboard__sidebar">
@@ -33,7 +50,7 @@ return (
 
     {
         /* Admin Routes */
-        auth && (
+        isAdmin && (
         <>
             {/* to show Booked Events by Users */}
             <Link to="user-bookings" className="user-dashboard__sidebar-link">
