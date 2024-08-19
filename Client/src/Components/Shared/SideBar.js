@@ -7,14 +7,10 @@ import { HiTicket } from "react-icons/hi2";
 import { TbTicketOff } from "react-icons/tb";
 import { GoHome } from "react-icons/go";
 import { GrHomeRounded } from "react-icons/gr";
-
 import {jwtDecode} from "jwt-decode";
-
-
 import { useNavigate } from "react-router-dom";
 import { getAuthUser, getAccessToken } from "../../helper/Storage";
 import "../../App.css";
-import {jwtDecode} from "jwt-decode";
 
 export default function SideBar() {
     const navigate = useNavigate();

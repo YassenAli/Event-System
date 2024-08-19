@@ -39,6 +39,9 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class BookingSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    event = EventSerializer()
+    
     class Meta:
         model = Booking
         fields = '__all__'

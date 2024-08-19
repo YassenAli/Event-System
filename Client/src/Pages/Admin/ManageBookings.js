@@ -17,6 +17,7 @@ export default function AUserBookings() {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/bookings/');
         setUserBookings({ loading: false, results: response.data, err: null });
+        console.log("userBookings", userBookings);
       } catch (error) {
         setUserBookings({ loading: false, err: 'Failed to load user bookings' });
       }
@@ -55,11 +56,11 @@ export default function AUserBookings() {
             {userBookings.results.map((booking, index) => (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>{booking.email}</td>
-                <td>{booking.eventTitle}</td>
-                <td>{booking.date}</td>
-                <td>{booking.time}</td>
-                <td>{booking.location}</td>
+                <td>{booking.user.email}</td>
+                <td>{booking.event.name}</td>
+                <td>{booking.event.date}</td>
+                <td>{booking.event.time}</td>
+                <td>{booking.event.location}</td>
               </tr>
             ))}
           </tbody>

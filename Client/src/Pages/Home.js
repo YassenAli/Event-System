@@ -72,10 +72,6 @@ export default function Events() {
 
       const response = await axios.get("http://127.0.0.1:8000/api/bookings/", {
         params: { email: userEmail },
-
-      // const response = await axios.get(`http://127.0.0.1:8000/api/bookings`, {
-      //   params: { email: userEmail }
-
       });
       setBookings(response.data);
     } catch (error) {
@@ -86,31 +82,24 @@ export default function Events() {
     }
   };
 
+
   const handleBook = async (eventId) => {
     if (!userEmail) {
       console.error("User email is not set. Cannot book the event.");
       return;
     }
-
+  
     try {
-
       const bookingData = {
-        event: eventId,
-        user: userEmail,
-      };
-
-      console.log("Booking Event with:", bookingData);
-
-      // const response = await axios.post("http://127.0.0.1:8000/api/bookings/", bookingData);
-
-      const response = await axios.post('http://127.0.0.1:8000/api/bookings', {
-        eventId,
+        eventId: eventId,
         email: userEmail,
-      });
-
-
-      if (response.status === 200) {
-        setJustBooked(true);
+      };
+  
+      const response = await axios.post('http://127.0.0.1:8000/api/bookings/book-event/', bookingData);
+  
+      if (response.status === 201) {
+        console.log("Event booked successfully!");
+        setJustBooked(true);  // Trigger reloading of bookings
       } else {
         console.error("Error booking event with status:", response.status);
       }
@@ -121,26 +110,24 @@ export default function Events() {
 
   const handleCancel = async (eventId) => {
     try {
-      const booking = bookings.find((booking) => booking.eventId === eventId);
-      if (booking) {
-
-        const response = await axios.delete(
-          `http://127.0.0.1:8000/api/bookings/${booking._id}`
-        );
-
-        // const response = await axios.delete(`http://127.0.0.1:8000/api/bookings/${booking._id}`);
-
-
-        if (response.status === 200) {
-          setJustBooked(true);
-        } else {
-          console.error("Error canceling booking");
-        }
+      const response = await axios.delete('http://127.0.0.1:8000/api/bookings/cancel-booking/', {
+        params: {
+          eventId: eventId,
+          email: userEmail,
+        },
+      });
+  
+      if (response.status === 200) {
+        console.log("Booking canceled successfully!");
+        setJustBooked(true);  // Trigger reloading of bookings
+      } else {
+        console.error("Error canceling booking:", response.status);
       }
     } catch (error) {
-      console.error("Error canceling booking:", error);
+      console.error("Error canceling booking:", error.response?.data || error.message);
     }
   };
+  
   const searchEvents = (e) => {
     e.preventDefault();
     setEvents({ ...events, reload: events.reload + 1 });
