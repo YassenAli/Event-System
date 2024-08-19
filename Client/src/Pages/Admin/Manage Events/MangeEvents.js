@@ -120,9 +120,6 @@ export default function ManageEvents() {
                       <span className="button__text" style={{color:"#1a3f47"}}>Update</span>
                       <span className="button__icon" style={{color:"#1a3f47", backgroundColor:"rgb(36, 70, 134)"}}><MdOutlineTipsAndUpdates /></span>
                     </Link>
-                    {/* <Link to={`/${event._id}`} className="btn btn-info">
-                      view
-                    </Link> */}
                   </td>
                 </tr>
               ))}

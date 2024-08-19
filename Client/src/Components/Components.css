@@ -234,14 +234,14 @@ pallete{
 
 /*----------------------- Ticket.css -----------------------*/
 .ticketWrap {
-  width: 25em;
-  /* margin: 3em auto; */
-  color: #fff;
-  font-family: sans-serif;
-  /* padding: 5px; */
-  /* margin: -5px; */
-  margin-top: -100px;
-  height: 20em;
+    /* width: 25em; */
+    /* margin: 3em auto; */
+    /* color: #fff; */
+    font-family: sans-serif;
+    /* padding: 5px; */
+    /* margin: -5px; */
+    /* margin-top: -100px; */
+    /* height: 20em; */
 }
 
 .ticket {
@@ -250,13 +250,13 @@ pallete{
   float: left;
   position: relative;
   padding: 1em;
-  margin-top: 100px;
+  /* margin-top: 100px; */
 }
 
 .ticketLeft {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  width: 12em;
+  width: 38em;
 }
 
 .ticketRight {
@@ -288,99 +288,88 @@ pallete{
 .ticket-title {
   font-size: 1.1em;
   margin-top: 0;
+  color: #efe8d8;
 }
 .ticket-title span {
   font-weight: normal;
 }
 
-.movieTitle, .ticketHolderName, .seatNumber, .showTime {
-  text-transform: uppercase;
-  font-weight: normal;
+.ticket-des span{
+  font-size: 0.66em;
+  color: #a2aeae;
 }
-.movieTitle h2, .ticketHolderName h2, .seatNumber h2, .showTime h2 {
-  font-size: 0.9em;
+.ticket-des p{
+  font-size: 0.76em;
   color: #525252;
   margin: 0;
 }
-.movieTitle span, .ticketHolderName span, .seatNumber span, .showTime span {
-  font-size: 0.7em;
+
+.showDate, .showTime {
+  text-transform: uppercase;
+  font-weight: normal;
+}
+.showDate h2 , .showTime h2 {
+  font-size: 0.76em;
+  color: #525252;
+  margin: 0;
+}
+.showDate span,.showTime span {
+  font-size: 0.66em;
   color: #a2aeae;
 }
 
-.movieTitle {
-  margin: 2em 0 0 0;
-}
-
-.ticketHolderName, .seatNumber {
-  margin: 0.7em 0 0 0;
-}
 
 .showTime {
-  margin: 0.7em 0 0 1em;
+  margin: 1.7em 0 0 0em;
 }
+.showDate {
+  margin: 1.7em 0 0 3.6em;
+}
+
+
 
 .seatNumber, .showTime {
   float: left;
 }
 
 .eye {
-  position: relative;
-  width: 2em;
-  height: 1.5em;
-  background: #fff;
-  margin: 0 auto;
-  border-radius: 1em/0.6em;
-  z-index: 1;
-}
-.eye:before, .eye:after {
-  content: "";
-  display: block;
-  position: absolute;
-  border-radius: 50%;
-}
-.eye:before {
-  width: 1em;
-  height: 1em;
-  background: #000;
-  z-index: 2;
-  left: 8px;
-  top: 4px;
-}
-.eye:after {
-  width: 0.5em;
-  height: 0.5em;
-  background: #fff;
-  z-index: 3;
-  left: 12px;
-  top: 8px;
+  margin-top: -8px;
+  margin-bottom: 7px;
 }
 
-.ticketNumber {
+
+.location {
   text-align: center;
   text-transform: uppercase;
 }
-.ticketNumber h3 {
+.location h6 {
   color: #000;
-  margin: 0.9em 0 0 0;
-  font-size: 2.5em;
+  margin: 0.2em 0 0 0;
+  font-size: 0.85em;
 }
-.ticketNumber span {
-  display: block;
+.location span {
+  /* display: block; */
   color: #a2aeae;
+  font-size: 0.67em;
 }
 .ticket-btn{
-  /* display: block; */
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: 0;
-  background-color: #23c483;
-  /* box-shadow: rgb(0 0 0 / 5%) 0 0 8px; */
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  font-size: 12px;
-  transition: all 0.5s ease;
-  margin-top: 5px;
+    /* display: block; */
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 0;
+    background-color: #584c34;
+    /* box-shadow: rgb(0 0 0 / 5%) 0 0 8px; */
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 11px;
+    transition: all 0.5s ease;
+    margin-top: 20px;
+    color: aliceblue;
+    height: 31px;
+    text-align: center;
+    justify-content: center;
+
 }
 .ticket-btn:hover{
   letter-spacing: 5px;

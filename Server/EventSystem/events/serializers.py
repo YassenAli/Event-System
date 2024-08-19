@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 from .models import CustomUser, Event, Booking
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer

@@ -1,10 +1,21 @@
 import React from 'react';
 import './Components.css';
+import { RiEyeLine } from "react-icons/ri";
+import { IoTicketOutline } from "react-icons/io5";
+import { MdAccessTime } from "react-icons/md";
+import { HiMiniCalendar } from "react-icons/hi2";
+import { IoLocationOutline } from "react-icons/io5";
 
-const Ticket = ({ props, isBooked, handleCancel }) => {
+const Ticket = ({ props, isBooked, handleCancel, handleBook }) => {
   return (
     <div className="ticketWrap">
       <div className="ticket ticketLeft">
+
+        <h1 className='ticket-title'> {props.name}</h1>
+        <div className="ticket-des">
+          <span><IoTicketOutline style={{marginBottom:'4px',fontSize:'15px'}}/> DISCRIPTION</span>
+          <p>{props.description}</p>
+
         <h1 className='ticket-title'>Event <span>Booking</span></h1>
         <div className="eventTitle">
           <h2>{props.name}</h2>
@@ -13,28 +24,33 @@ const Ticket = ({ props, isBooked, handleCancel }) => {
         <div className="location">
           <h2>{props.location}</h2>
           <span>Location</span>
+
         </div>
         <div className="showTime">
+          <span><MdAccessTime style={{marginBottom:'4px'}}/> Time</span>
           <h2>{props.time}</h2>
-          <span>Time</span>
         </div>
         <div className="showDate">
+          <span><HiMiniCalendar style={{marginBottom:'4px'}}/> Date</span>
           <h2>{props.date}</h2>
-          <span>Date</span>
         </div>
       </div>
       <div className="ticket ticketRight">
-        <div className="eye"></div>
-        <div className="ticketNumber">
-          <h3>{props.location}</h3>
-          <span>location</span>
+        <div className='eye'><RiEyeLine fontSize={"32px"} color='#efe8d8'/></div>
+        <div className="location">
+          <span><IoLocationOutline style={{marginBottom:'4px',fontSize:'12px'}}/> location</span>
+          <h6 >{props.location}</h6>
         </div>
         {/* Conditional Cancel Button */}
         {isBooked && (
-          <button onClick={() => handleCancel(props.eventId)} className="ticket-btn">
+          <button onClick={() => handleCancel(props.id)} className="ticket-btn">
             Cancel Booking
           </button>
         )}
+        {!isBooked && (
+          <button onClick={() => handleBook(props.id)} className="ticket-btn">Book</button>
+        )}
+          </div>
       </div>
     </div>
   );
@@ -42,41 +58,3 @@ const Ticket = ({ props, isBooked, handleCancel }) => {
 
 export default Ticket;
 
-// import React from 'react';
-// import './Components.css';
-
-// const Ticket = ({ props }) => {
-//   return (
-//     <div className="ticketWrap">
-//       <div className="ticket ticketLeft">
-//         <h1 className='ticket-name'>Event <span>Booking</span></h1>
-//         <div className="eventname">
-//           <h2>{props.name}</h2>
-//           <span><p>{props.description}</p></span>
-//         </div>
-//         <div className="location">
-//           <h2>{props.location}</h2>
-//           <span>Seat</span>
-//         </div>
-//         <div className="showTime">
-//           <h2>{props.time}</h2>
-//           <span>Time</span>
-//         </div>
-//         <div className="showDate">
-//           <h2>{props.date}</h2>
-//           <span>Date</span>
-//         </div>
-//       </div>
-//       <div className="ticket ticketRight">
-//         <div className="eye"></div>
-//         <div className="ticketNumber">
-//           <h3>{props.location}</h3>
-//           <span>Seat</span>
-//         </div>
-//         <button className='ticket-btn'>Ticket</button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Ticket;
