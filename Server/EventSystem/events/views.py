@@ -11,6 +11,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.utils.crypto import get_random_string
 import jwt
 from datetime import datetime, timedelta
+from rest_framework.decorators import action
 from django.conf import settings
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
@@ -86,7 +87,7 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     
-    def destroy(self, request, *args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         user = self.get_object()
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -102,18 +103,58 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data)
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
+    
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    
+    @action(detail=False, methods=['post'], url_path='book-event')
+    def book_event(self, request):
+        user_email = request.data.get('email')
+        event_id = request.data.get('eventId')
+
+        try:
+            user = CustomUser.objects.get(email=user_email)
+            event = Event.objects.get(id=event_id)
+
+            # Check if booking already exists
+            if Booking.objects.filter(user=user, event=event).exists():
+                return Response({"error": "You have already booked this event."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create a new booking
+            Booking.objects.create(user=user, event=event)
+            return Response({"message": "Event booked successfully!"}, status=status.HTTP_201_CREATED)
+
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['delete'], url_path='cancel-booking')
+    def cancel_booking(self, request):
+        user_email = request.query_params.get('email')
+        event_id = request.query_params.get('eventId')
+
+        try:
+            user = CustomUser.objects.get(email=user_email)
+            event = Event.objects.get(id=event_id)
+            booking = Booking.objects.get(user=user, event=event)
+            booking.delete()
+            return Response({"message": "Booking canceled successfully!"}, status=status.HTTP_200_OK)
+
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Booking.DoesNotExist:
+            return Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
 
 class SignupView(APIView):
     admin_emails = [
@@ -180,43 +221,3 @@ class LoginView(APIView):
             return Response({'token': token, 'user_id': user.id, 'username': user.username, 'is_superuser': user.is_superuser})
         else:
             return Response({'error': 'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-                # def create(self, request, *args, **kwargs):
-    #     data = request.data
-    #     data['created_by'] = request.user.id
-    #     serializer = self.get_serializer(data=data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     # return serializer.data
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
-    # def update(self, request, *args, **kwargs):
-    #     data = request.data
-    #     data['created_by'] = request.user.id
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance, data=data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_update(serializer)
-    #     return Response(serializer.data)
-    
-    # def destroy(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     if instance.created_by != request.user:
-    #         return Response({'error': 'You are not authorized to delete this event'}, status=status.HTTP_403_FORBIDDEN)
-    #     self.perform_destroy(instance)
-    #     return Response(status=status.HTTP_204_NO_CONTENT)

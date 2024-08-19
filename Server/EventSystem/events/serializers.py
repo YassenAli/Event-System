@@ -1,3 +1,4 @@
+
 from rest_framework import serializers
 from .models import CustomUser, Event, Booking
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -19,6 +20,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
+        token['is_superuser'] = user.is_superuser
+        token['email'] = user.email
+        token['id'] = user.id
+        token['password'] = user.password
         # ...
 
         return token
@@ -34,6 +39,9 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class BookingSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    event = EventSerializer()
+    
     class Meta:
         model = Booking
         fields = '__all__'
