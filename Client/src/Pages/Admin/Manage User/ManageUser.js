@@ -37,7 +37,7 @@ export default function ManageUser() {
   const deleteUser = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       axios
-        .delete("http://127.0.0.1:8000/api/users/", {
+      .delete(`http://127.0.0.1:8000/api/users/${id}/`, {
           headers: {
             Authorization: `Bearer ${getAccessToken()}`,
           },

@@ -87,15 +87,26 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     
-    def delete(self, request, *args, **kwargs):
-        user = self.get_object()
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    def destroy(self, request, pk=None):
+        try:
+            user = CustomUser.objects.get(id=pk)
+            user.delete()
+            return Response({"message": "User deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     
+    def destroy(self, request, pk=None):
+        try:
+            event = Event.objects.get(id=pk)
+            event.delete()
+            return Response({"message": "Event deleted successfully!"}, status=status.HTTP_204_NO_CONTENT)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        
     def post(self, request):
         data = request.data
         data['created_by'] = request.user.id
@@ -104,12 +115,17 @@ class EventViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         return Response(serializer.data)
     
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def update(self, request, pk=None):
+        try:
+            event = Event.objects.get(id=pk)
+            serializer = self.get_serializer(event, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
