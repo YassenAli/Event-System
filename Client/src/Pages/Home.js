@@ -11,13 +11,16 @@ import { Box } from "@mui/material";
 
 export default function Events() {
   const email = getEmail() || null;  // Get the email if it exists, otherwise set to null
-  const auth = getAuthUser();
+  //const auth = getAuthUser();
+
   const [userEmail, setUserEmail] = useState(email);
+  
+
   const [events, setEvents] = useState({
     loading: true,
     results: [],
     err: null,
-    reload: 0,
+    reload: 1
   });
   // console.log('User Dat', getAuthUser());
   const [bookings, setBookings] = useState([]);
@@ -26,7 +29,10 @@ export default function Events() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (auth && email) {
+
+    if(events.reload){
+    
+    if (getAuthUser() && email) {
       setUserEmail(email);
     } else {
       console.error("User is not authenticated or email is missing.");
@@ -35,7 +41,7 @@ export default function Events() {
     setEvents({ ...events, loading: true });
     axios
       .get("http://127.0.0.1:8000/api/events/", {
-        params: { search: "" },  // Adjust if needed
+        params: {search:""},  // Adjust if needed
       })
       .then((resp) => {
         setEvents({ ...events, results: resp.data, loading: false });
@@ -47,24 +53,15 @@ export default function Events() {
           err: "Something went wrong, please try again later!",
         });
       });
-
-    axios.get("http://127.0.0.1:8000/api/events/", {
-      params: {
-        search: search,
-      }
-    }).then((resp) => {
-      setEvents({ ...events, results: resp.data, loading: false });
-    }).catch((err) => {
-      setEvents({ ...events, loading: false, err: 'Something went wrong, please try again later!' });
-    });
-
+    
+    }
   }, [events.reload]);
 
   useEffect(() => {
-    if (auth ) {
+    if (getAuthUser()  ) {
       fetchBookings();
     }
-  }, [auth, justBooked]);
+  }, [ justBooked]);
 
   const fetchBookings = async () => {
     setBookingLoading(true);
@@ -101,6 +98,7 @@ export default function Events() {
       if (response.status === 201) {
         console.log("Event booked successfully!");
         setJustBooked(true);  // Trigger reloading of bookings
+        // fetchBookings();
       } else {
         console.error("Error booking event with status:", response.status);
       }
@@ -121,6 +119,7 @@ export default function Events() {
       if (response.status === 200) {
         console.log("Booking canceled successfully!");
         setJustBooked(true);  // Trigger reloading of bookings
+        // fetchBookings();
       } else {
         console.error("Error canceling booking:", response.status);
       }
@@ -133,6 +132,10 @@ export default function Events() {
     e.preventDefault();
     setEvents({ ...events, reload: events.reload + 1 });
   };
+
+  const test = bookings.some(
+    (booking) => console.log('booking' ,booking)
+  );
 
   return (
     <div>
@@ -179,7 +182,7 @@ export default function Events() {
               </div>
             )}
 
-            {!auth && (
+            {!getAuthUser() && (
               <div className="d-flex justify-content-center align-items-center">
                 <Alert
                   variant="warning"
@@ -200,9 +203,9 @@ export default function Events() {
 
             {events.results.map((event) => {
               const isBooked = bookings.some(
-                (booking) => booking.event.id === event.id
+                (booking) => booking.user.email === getEmail() && booking.event.id === event.id
               );
-              console.log(event.id, "isBooked", isBooked);
+              // console.log(event.id, "isBooked", isBooked);
               return (
                 <Box display="grid" justifyContent="center" flexWrap="wrap" key={event.id}>
                   <Ticket
@@ -217,19 +220,6 @@ export default function Events() {
           </div>
         </>
       )}
-
-
-
-      {
-        !events.loading && !events.err && events.results.length === 0 && (
-          <div className="d-flex justify-content-center align-items-center">
-            <Alert variant="info" className="auth-alert text-center w-50">
-              There Is No Events 🎟!
-            </Alert>
-          </div>
-        )
-      }
-
     </div>
   );
 }
