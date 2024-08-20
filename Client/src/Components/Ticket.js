@@ -1,60 +1,54 @@
-import React from 'react';
-import './Components.css';
-import { RiEyeLine } from "react-icons/ri";
-import { IoTicketOutline } from "react-icons/io5";
+/* ticket */
+
+import React from "react";
+import "./Components.css";
 import { MdAccessTime } from "react-icons/md";
-import { HiMiniCalendar } from "react-icons/hi2";
 import { IoLocationOutline } from "react-icons/io5";
+import { TbTicketOff } from "react-icons/tb";
+import { TbTicket } from "react-icons/tb";
+import { BsCalendar2Event } from "react-icons/bs";
 
 const Ticket = ({ props, isBooked, handleCancel, handleBook }) => {
+  console.log("props", props);
   return (
-    <div className="ticketWrap">
-      <div className="ticket ticketLeft">
-
-        <h1 className='ticket-title'> {props.name}</h1>
-        <div className="ticket-des">
-          <span><IoTicketOutline style={{marginBottom:'4px',fontSize:'15px'}}/> DISCRIPTION</span>
-          <p>{props.description}</p>
-
-        <h1 className='ticket-title'>Event <span>Booking</span></h1>
-        <div className="eventTitle">
-          <h2>{props.name}</h2>
-          <span><p>{props.description}</p></span>
+    <div className="event-card">
+      <div className="time-box">
+        <div className="time-icon">
+          <BsCalendar2Event />
+          <div className="date">{props.date}</div>
         </div>
-        <div className="location">
-          <h2>{props.location}</h2>
-          <span>Location</span>
-
-        </div>
-        <div className="showTime">
-          <span><MdAccessTime style={{marginBottom:'4px'}}/> Time</span>
-          <h2>{props.time}</h2>
-        </div>
-        <div className="showDate">
-          <span><HiMiniCalendar style={{marginBottom:'4px'}}/> Date</span>
-          <h2>{props.date}</h2>
+        <div className="time">
+          <MdAccessTime style={{ marginBottom: "3px" }} /> {props.time}
         </div>
       </div>
-      <div className="ticket ticketRight">
-        <div className='eye'><RiEyeLine fontSize={"32px"} color='#efe8d8'/></div>
-        <div className="location">
-          <span><IoLocationOutline style={{marginBottom:'4px',fontSize:'12px'}}/> location</span>
-          <h6 >{props.location}</h6>
+
+      <div className="location">
+        <div className="time-icon">
+          <IoLocationOutline />
+          <div className="date">{props.location}</div>
         </div>
-        {/* Conditional Cancel Button */}
+      </div>
+
+      <div className="event-body">
+        <div className="event-name">{props.name}</div>
+        <div className="dsrp">{props.description}</div>
+        <div className="event-bottom"></div>
+      </div>
+
+      <div className="ticket-btn">
         {isBooked && (
-          <button onClick={() => handleCancel(props.id)} className="ticket-btn">
-            Cancel Booking
+          <button onClick={() => handleCancel(props.id)} className="cancel-btn">
+            <TbTicketOff fontSize={"21px"} />
           </button>
         )}
         {!isBooked && (
-          <button onClick={() => handleBook(props.id)} className="ticket-btn">Book</button>
+          <button onClick={() => handleBook(props.id)} className="book-btn">
+            <TbTicket fontSize={"21px"} />
+          </button>
         )}
-          </div>
       </div>
     </div>
   );
 };
 
 export default Ticket;
-

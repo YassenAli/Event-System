@@ -13,7 +13,7 @@ export default function UpdateEvent() {
 
   const [eventData, setEventData] = useState({
     loading: false,
-    title: "",
+    name: "",
     description: "",
     date: "",
     time: "",
@@ -27,11 +27,11 @@ export default function UpdateEvent() {
   useEffect(() => {
     setEventData({ ...eventData, loading: true });
     axios
-      .get("http://127.0.0.1:8000/api/events/" + id)
+      .get(`http://127.0.0.1:8000/api/events/${id}/`)
       .then((resp) => {
         setEventData({
           ...eventData,
-          title: resp.data.title,
+          name: resp.data.name,
           description: resp.data.description,
           date: resp.data.date,
           time: resp.data.time,
@@ -51,15 +51,15 @@ export default function UpdateEvent() {
     e.preventDefault();
     setEventData({ ...eventData, loading: true });
     const formData = new FormData();
-    formData.append("title", eventData.title);
+    formData.append("name", eventData.name);
     formData.append("description", eventData.description);
     formData.append("date", eventData.date);
     formData.append("time", eventData.time);
     formData.append("location", eventData.location);
 
     axios
-      .put("http://127.0.0.1:8000/api/events/" + id, formData, {
-        header: {
+      .put(`http://127.0.0.1:8000/api/events/${id}/`, formData, {
+        headers: {
           Authorization: `Bearer ${getAccessToken()}`,
         },
       })
@@ -90,11 +90,12 @@ export default function UpdateEvent() {
         <h3 style={{ fontSize: "23px" }}>Update Event</h3>
       </div>
       <Ticket
-        title={eventData.title}
+        name={eventData.name}
         date={eventData.date}
         time={eventData.time}
         location={eventData.location}
         description={eventData.description}
+        props={eventData}
       />
 
       <form onSubmit={updateEvent} className="manage-events-form">
@@ -110,10 +111,10 @@ export default function UpdateEvent() {
         )}
         <input
           type="text"
-          name="title"
-          value={eventData.title}
+          name="name"
+          value={eventData.name}
           onChange={handleChange}
-          placeholder="Title"
+          placeholder="name"
           required
           className="manage-events-input"
         />

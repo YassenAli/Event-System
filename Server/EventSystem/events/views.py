@@ -130,47 +130,94 @@ class EventViewSet(viewsets.ModelViewSet):
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
-    
-    @action(detail=False, methods=['post'], url_path='book-event')
-    def book_event(self, request):
-        user_email = request.data.get('email')
+      
+    def create(self, request, *args, **kwargs):
         event_id = request.data.get('eventId')
+        user_email = request.data.get('email')
 
         try:
-            user = CustomUser.objects.get(email=user_email)
+            # Retrieve the event and user based on the provided IDs
             event = Event.objects.get(id=event_id)
+            user = CustomUser.objects.get(email=user_email)
 
-            # Check if booking already exists
-            if Booking.objects.filter(user=user, event=event).exists():
-                return Response({"error": "You have already booked this event."}, status=status.HTTP_400_BAD_REQUEST)
+            # Check if the booking already exists
+            booking, created = Booking.objects.get_or_create(event=event, user=user)
 
-            # Create a new booking
-            Booking.objects.create(user=user, event=event)
-            return Response({"message": "Event booked successfully!"}, status=status.HTTP_201_CREATED)
-
-        except CustomUser.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+            if created:
+                serializer = self.get_serializer(booking)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"detail": "Booking already exists."}, status=status.HTTP_400_BAD_REQUEST)
+        
         except Event.DoesNotExist:
-            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['delete'], url_path='cancel-booking')
+    @action(detail=False, methods=['delete'], url_path='cancel')
     def cancel_booking(self, request):
-        user_email = request.query_params.get('email')
         event_id = request.query_params.get('eventId')
+        user_email = request.query_params.get('email')
 
         try:
-            user = CustomUser.objects.get(email=user_email)
+            # Retrieve the event and user based on the provided IDs
             event = Event.objects.get(id=event_id)
-            booking = Booking.objects.get(user=user, event=event)
-            booking.delete()
-            return Response({"message": "Booking canceled successfully!"}, status=status.HTTP_200_OK)
+            user = CustomUser.objects.get(email=user_email)
 
-        except CustomUser.DoesNotExist:
-            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+            # Find the booking
+            booking = Booking.objects.get(event=event, user=user)
+            booking.delete()
+
+            return Response({"detail": "Booking canceled successfully!"}, status=status.HTTP_200_OK)
+
         except Event.DoesNotExist:
-            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        except CustomUser.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
         except Booking.DoesNotExist:
-            return Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"detail": "Booking not found."}, status=status.HTTP_404_NOT_FOUND) 
+    # @action(detail=False, methods=['post'], url_path='book-event')
+    # def book_event(self, request):
+    #     user_email = request.data.get('email')
+    #     event_id = request.data.get('eventId')
+
+    #     try:
+    #         user = CustomUser.objects.get(email=user_email)
+    #         event = Event.objects.get(id=event_id)
+
+    #         # Check if booking already exists
+    #         if Booking.objects.filter(user=user, event=event).exists():
+    #             return Response({"error": "You have already booked this event."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #         # Create a new booking
+    #         Booking.objects.create(user=user, event=event)
+    #         return Response({"message": "Event booked successfully!"}, status=status.HTTP_201_CREATED)
+
+    #     except CustomUser.DoesNotExist:
+    #         return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+    #     except Event.DoesNotExist:
+    #         return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+    
+
+    # @action(detail=False, methods=['delete'], url_path='cancel-booking')
+    # def cancel_booking(self, request):
+    #     user_email = request.query_params.get('email')
+    #     event_id = request.query_params.get('eventId')
+
+    #     try:
+    #         user = CustomUser.objects.get(email=user_email)
+    #         event = Event.objects.get(id=event_id)
+    #         booking = Booking.objects.get(user=user, event=event)
+    #         booking.delete()
+    #         return Response({"message": "Booking canceled successfully!"}, status=status.HTTP_200_OK)
+
+    #     except CustomUser.DoesNotExist:
+    #         return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+    #     except Event.DoesNotExist:
+    #         return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+    #     except Booking.DoesNotExist:
+    #         return Response({"error": "Booking not found."}, status=status.HTTP_404_NOT_FOUND)
 
 class SignupView(APIView):
     admin_emails = [

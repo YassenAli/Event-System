@@ -113,7 +113,7 @@ export default function ManageEvents() {
                       <span className="button__text" style={{color:"#471a1a"}}>Delete</span>
                       <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)"}}><RiDeleteBin3Line /></span>
                     </button>
-                    <Link to={`${event.id}`} 
+                    <Link to={`update/${event.id}`} 
                       className="add-button"
                       style={{border:"#471a1a",boxShadow:"#1a3f47", backgroundColor:"#d7e6f1" }}
                     >

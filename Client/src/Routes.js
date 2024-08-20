@@ -69,7 +69,7 @@ export const router = createBrowserRouter([
                 element: <AddEvent/>,
               },
               {
-                path: "update", //update
+                path: "update/:id", //update
                 element: <UpdateEvent />,
               },
             ]
