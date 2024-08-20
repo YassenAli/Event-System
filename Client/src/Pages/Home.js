@@ -5,14 +5,14 @@ import Loader from "../Components/Loader";
 import Ticket from "../Components/Ticket";
 import Alert from "react-bootstrap/Alert";
 import { Form, FormControl, Button } from "react-bootstrap";
-import { getAuthUser } from "../helper/Storage";
+import { getAuthUser, getEmail } from "../helper/Storage";
 import { HiOutlineTicket } from "react-icons/hi";
 import { Box } from "@mui/material";
 
-
 export default function Events() {
+  const email = getEmail() || null;  // Get the email if it exists, otherwise set to null
   const auth = getAuthUser();
-  const [userEmail, setUserEmail] = useState(auth?.email || "");
+  const [userEmail, setUserEmail] = useState(email);
   const [events, setEvents] = useState({
     loading: true,
     results: [],
@@ -26,8 +26,8 @@ export default function Events() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (auth && auth.email) {
-      setUserEmail(auth.email);
+    if (auth && email) {
+      setUserEmail(email);
     } else {
       console.error("User is not authenticated or email is missing.");
     }
@@ -74,6 +74,7 @@ export default function Events() {
         params: { email: userEmail },
       });
       setBookings(response.data);
+      console.log("Bookings:", bookings);
     } catch (error) {
       console.error("Error fetching bookings:", error);
     } finally {
@@ -85,7 +86,7 @@ export default function Events() {
 
   const handleBook = async (eventId) => {
     if (!userEmail) {
-      console.error("User email is not set. Cannot book the event.");
+      alert("User email is not set. Cannot book the event.");
       return;
     }
   
@@ -95,7 +96,7 @@ export default function Events() {
         email: userEmail,
       };
   
-      const response = await axios.post('http://127.0.0.1:8000/api/bookings/book-event/', bookingData);
+      const response = await axios.post('http://127.0.0.1:8000/api/bookings/', bookingData);
   
       if (response.status === 201) {
         console.log("Event booked successfully!");
@@ -110,7 +111,7 @@ export default function Events() {
 
   const handleCancel = async (eventId) => {
     try {
-      const response = await axios.delete('http://127.0.0.1:8000/api/bookings/cancel-booking/', {
+      const response = await axios.delete('http://127.0.0.1:8000/api/bookings/cancel/', {
         params: {
           eventId: eventId,
           email: userEmail,
@@ -199,8 +200,9 @@ export default function Events() {
 
             {events.results.map((event) => {
               const isBooked = bookings.some(
-                (booking) => booking.eventId === event.id
+                (booking) => booking.event.id === event.id
               );
+              console.log("isBooked", isBooked);
               return (
                 <Box display="grid" justifyContent="center" flexWrap="wrap" key={event.id}>
                   <Ticket
