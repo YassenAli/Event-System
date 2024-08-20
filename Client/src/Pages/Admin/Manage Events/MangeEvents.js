@@ -43,7 +43,7 @@ export default function ManageEvents() {
   const deleteEvent = (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       axios
-        .delete("http://127.0.0.1:8000/api/events/" + id, {
+        .delete(`http://127.0.0.1:8000/api/events/${id}/` , {
           headers: {
             Authorization: `Bearer ${getAccessToken()}`,
           },
@@ -95,9 +95,9 @@ export default function ManageEvents() {
             </thead>
             <tbody>
               {events.results.map((event, index) => (
-                <tr key={event._id}>
+                <tr key={event.id}>
                   <td>{index + 1}</td>
-                  <td>{event.title}</td>
+                  <td>{event.name}</td>
                   <td>{event.description}</td>
                   <td>{event.date}</td>
                   <td>{event.time}</td>
@@ -105,7 +105,7 @@ export default function ManageEvents() {
                   <td>
                     <button
                       onClick={(e) => {
-                        deleteEvent(event._id);
+                        deleteEvent(event.id);
                       }}
                       className="add-button"
                       style={{border:"#471a1a",boxShadow:"#471a1a", backgroundColor:"#f1d7d7" }}
@@ -113,13 +113,14 @@ export default function ManageEvents() {
                       <span className="button__text" style={{color:"#471a1a"}}>Delete</span>
                       <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)"}}><RiDeleteBin3Line /></span>
                     </button>
-                    <Link to={`${event._id}`} 
+                    <Link to={`${event.id}`} 
                       className="add-button"
                       style={{border:"#471a1a",boxShadow:"#1a3f47", backgroundColor:"#d7e6f1" }}
                     >
                       <span className="button__text" style={{color:"#1a3f47"}}>Update</span>
                       <span className="button__icon" style={{color:"#1a3f47", backgroundColor:"rgb(36, 70, 134)"}}><MdOutlineTipsAndUpdates /></span>
                     </Link>
+
                   </td>
                 </tr>
               ))}

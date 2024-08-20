@@ -31,7 +31,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'is_superuser', 'password')
+        fields = ('username', 'email', 'is_superuser', 'password', 'id')
         
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
