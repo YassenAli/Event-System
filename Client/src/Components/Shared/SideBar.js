@@ -18,14 +18,14 @@ export default function SideBar() {
 
     let isAdmin = false;
 
-    console.log('accessToken', getAccessToken());
+    // console.log('accessToken', getAccessToken());
     // console.log('authaccess', auth.accessToken)
     if (auth && getAccessToken()) {
         try {
             const decodedToken = jwtDecode(getAccessToken());
             isAdmin = decodedToken?.is_superuser || false;
-            console.log('decodedToken', decodedToken);
-            console.log('sidebar', isAdmin);
+            // console.log('decodedToken', decodedToken);
+            // console.log('sidebar', isAdmin);
         } catch (error) {
             console.error("Invalid token:", error);
         }

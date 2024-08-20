@@ -9,7 +9,7 @@ import { removeAuthUser, getAuthUser } from "../../helper/Storage";
 export default function Navbar() {
     const navigate = useNavigate();
     const auth = getAuthUser();
-    console.log(auth);
+    // console.log(auth);
     const Login = () => {
         navigate("/login");
     };

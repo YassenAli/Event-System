@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 
 // COOKIES, LOCAL STORAGE
 export const setAuthUser = (data) => {
-    console.log("setAuth", data);
+    // console.log("setAuth", data);
     // Storing the tokens and user data
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);

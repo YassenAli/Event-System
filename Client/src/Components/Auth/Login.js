@@ -38,15 +38,15 @@ function Login({ onLogin, errorMessage }) {
     }).then(resp => {
       setLogin({...Login, loading: false, err:[]})
       const { access, refresh } = resp.data;  // Extract tokens
-      console.log("Tokens:", access, refresh);
-      console.log("login data", resp.data)
+      // console.log("Tokens:", access, refresh);
+      // console.log("login data", resp.data)
       setAuthUser({ accessToken: access, refreshToken: refresh });
       // setAuthUser(resp.data);
       navigate('/');
 
     }).catch(errors => {
       console.log(errors)
-      setLogin({...login, loading: false, err: errors.response?.data?.errors || [] });
+      setLogin({...login, loading: false, err: errors.response?.data?.errors || ["Invalid user. Please Signup!"] });
     });}
 
     // REGISTER
@@ -67,7 +67,7 @@ function Login({ onLogin, errorMessage }) {
   
       }).catch(errors => {
         console.log(errors)
-        setRegister({...register, loading: false, err: errors.response?.data?.errors || [] });
+        setRegister({...register, loading: false, err: errors.response?.data?.errors || ["Email already registered. Please try a different email."] });
       });}
 
 

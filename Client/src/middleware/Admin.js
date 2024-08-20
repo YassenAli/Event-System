@@ -9,12 +9,12 @@ export default function Admin() {
 
   let isAdmin = false;
 
-  console.log("admin.js auth", auth);
+  // console.log("admin.js auth", auth);
 
   if (auth && getAccessToken()) {
     try {
       const decodedToken = JWT.jwtDecode(getAccessToken());
-      console.log("Decoded Token:", decodedToken);
+      // console.log("Decoded Token:", decodedToken);
       isAdmin = decodedToken?.is_superuser || false;
     } catch (error) {
       console.error("Invalid token:", error);
