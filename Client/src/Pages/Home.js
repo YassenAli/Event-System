@@ -61,10 +61,10 @@ export default function Events() {
   }, [events.reload]);
 
   useEffect(() => {
-    if (auth) {
+    if (auth ) {
       fetchBookings();
     }
-  }, [auth]);
+  }, [auth, justBooked]);
 
   const fetchBookings = async () => {
     setBookingLoading(true);

@@ -105,23 +105,23 @@ export default function ManageEvents() {
                   <td>
                     <button
                       onClick={(e) => {
-                        deleteEvent(event.id);
+                        deleteEvent(event._id);
                       }}
                       className="add-button"
-                      style={{border:"#471a1a",boxShadow:"#471a1a", backgroundColor:"#f1d7d7" }}
+                      style={{border:"2px solid #471a1a",boxShadow:"4px 4px #471a1a", backgroundColor:"#f1d7d7" }}
                     >
-                      <span className="button__text" style={{color:"#471a1a"}}>Delete</span>
-                      <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)"}}><RiDeleteBin3Line /></span>
+                      <span className="button__text" style={{color:"#471a1a", transform:"translateX(22px)"}}>Delete</span>
+                      <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)", transform:"translateX(109px)"}}><RiDeleteBin3Line /></span>
                     </button>
+
                     <Link to={`update/${event.id}`} 
                       className="add-button"
-                      style={{border:"#471a1a",boxShadow:"#1a3f47", backgroundColor:"#d7e6f1" }}
+                      style={{border:"2px solid #1a2247",boxShadow:"4px 4px #1a2247", backgroundColor:"#d7e6f1" }}
                     >
-                      <span className="button__text" style={{color:"#1a3f47"}}>Update</span>
-                      <span className="button__icon" style={{color:"#1a3f47", backgroundColor:"rgb(36, 70, 134)"}}><MdOutlineTipsAndUpdates /></span>
+                      <span className="button__text" style={{color:"#1a2247", transform:"translateX(22px)"}}>Update</span>
+                      <span className="button__icon" style={{color:"#1a2247", backgroundColor:"rgb(36, 70, 134)", transform:"translateX(109px)"}}><MdOutlineTipsAndUpdates /></span>
                     </Link>
-
-                  </td>
+                  </td>
                 </tr>
               ))}
             </tbody>

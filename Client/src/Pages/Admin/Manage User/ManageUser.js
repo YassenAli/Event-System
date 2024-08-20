@@ -90,14 +90,14 @@ export default function ManageUser() {
                   <td>{user.username}</td>
                   <td>{user.email}</td>
                   <td>
-                    <button
+                  <button
                       onClick={() => deleteUser(user.id)}
                       className="add-button"
-                      style={{border:"#471a1a",boxShadow:"#471a1a", backgroundColor:"#f1d7d7" }}
+                      style={{border:"2px solid #471a1a",boxShadow:"4px 4px #471a1a", backgroundColor:"#f1d7d7" }}
                     >
-                      <span className="button__text" style={{color:"#471a1a"}}>Delete</span>
-                      <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)"}}><RiDeleteBin3Line /></span>
-                    </button>
+                      <span className="button__text" style={{color:"#471a1a", transform:"translateX(22px)"}}>Delete</span>
+                      <span className="button__icon" style={{color:"#471a1a", backgroundColor:"rgb(134, 36, 36)", transform:"translateX(109px)"}}><RiDeleteBin3Line /></span>
+                  </button>
                   </td>
                 </tr>
               ))}
