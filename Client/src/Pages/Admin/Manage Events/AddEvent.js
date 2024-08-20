@@ -66,7 +66,7 @@ export default function AddEvent() {
         },
       })
       .then((resp) => {
-        console.log(resp)
+        // console.log(resp)
         setEventData({ ...eventData, success: "Event Created Successfully" });
       })
       .catch((err) => {

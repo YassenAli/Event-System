@@ -19,7 +19,7 @@ export default function Events() {
     err: null,
     reload: 0,
   });
-  console.log('User Dat', getAuthUser());
+  // console.log('User Dat', getAuthUser());
   const [bookings, setBookings] = useState([]);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [justBooked, setJustBooked] = useState(false);
@@ -61,10 +61,10 @@ export default function Events() {
   }, [events.reload]);
 
   useEffect(() => {
-    if (auth && justBooked) {
+    if (auth) {
       fetchBookings();
     }
-  }, [auth, justBooked]);
+  }, [auth]);
 
   const fetchBookings = async () => {
     setBookingLoading(true);
@@ -202,7 +202,7 @@ export default function Events() {
               const isBooked = bookings.some(
                 (booking) => booking.event.id === event.id
               );
-              console.log("isBooked", isBooked);
+              console.log(event.id, "isBooked", isBooked);
               return (
                 <Box display="grid" justifyContent="center" flexWrap="wrap" key={event.id}>
                   <Ticket

@@ -4,7 +4,7 @@ import { getAuthUser } from '../helper/Storage'
 
 export default function Guest() {
     const auth= getAuthUser();
-    console.log('guest', auth);
+    // console.log('guest', auth);
 return (
     <>
         {
