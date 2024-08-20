@@ -14,7 +14,6 @@ export const getAuthUser = () => {
     if (user) {
         try {
             const parsedUser = JSON.parse(user);
-            console.log('Retrieved User:', parsedUser); // Check the user data
             return parsedUser;
         } catch (error) {
             console.error('Error parsing user data:', error);

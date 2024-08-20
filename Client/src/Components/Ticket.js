@@ -9,7 +9,7 @@ import { TbTicket } from "react-icons/tb";
 import { BsCalendar2Event } from "react-icons/bs";
 
 const Ticket = ({ props, isBooked, handleCancel, handleBook }) => {
-  console.log("props", props);
+  // console.log("props", props);
   return (
     <div className="event-card">
       <div className="time-box">
